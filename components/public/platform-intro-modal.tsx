@@ -159,35 +159,29 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity"
-        />
+      <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md flex min-h-full items-start sm:items-center justify-center p-3 sm:p-6 py-6 sm:py-10">
+        {/* Backdrop Click */}
+        <div className="fixed inset-0 pointer-events-auto" onClick={onClose} />
 
         {/* Modal Window */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden z-10 border border-slate-200"
+          className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden z-10 border border-slate-200 my-auto max-h-[88vh] flex flex-col pointer-events-auto"
         >
           {showComingSoon ? (
             /* ========================================================
                BEAUTIFUL COMING SOON / IN PREPARATION DIALOG
                ======================================================== */
-            <div className="p-8 sm:p-12 text-center flex flex-col items-center space-y-6">
+            <div className="p-6 sm:p-10 text-center flex flex-col items-center space-y-5 overflow-y-auto">
               <div className="relative">
-                <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-blue-500/30">
-                  <Rocket className="w-10 h-10 animate-bounce" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-blue-500/30">
+                  <Rocket className="w-8 h-8 sm:w-10 sm:h-10 animate-bounce" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-amber-400 border-2 border-white flex items-center justify-center text-slate-900 shadow">
-                  <Clock className="w-4 h-4" />
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-amber-400 border-2 border-white flex items-center justify-center text-slate-900 shadow">
+                  <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
               </div>
 
@@ -196,37 +190,37 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                   <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                   Platform In Active Preparation
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                <h3 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                   {platform.name} Launching Soon
                 </h3>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                  The live portal link and systems for <strong>{platform.name}</strong> are currently being finalized. Once deployed, the direct site link will open automatically from this gateway.
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  The live portal link and digital systems for <strong>{platform.name}</strong> are currently being finalized. Once deployed, the direct site link will open automatically from this gateway.
                 </p>
               </div>
 
-              <div className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-left grid sm:grid-cols-2 gap-3 text-xs text-slate-700">
+              <div className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-left grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                   <span>Dedicated Independent Systems</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-500" />
+                  <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
                   <span>Integrated Application Forms</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                  <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0" />
                   <span>Direct Recruiter & Skill Access</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-violet-500" />
+                  <span className="w-2 h-2 rounded-full bg-violet-500 shrink-0" />
                   <span>Official Organization Verified</span>
                 </div>
               </div>
 
-              <div className="pt-2 flex flex-col sm:flex-row gap-3 w-full justify-center">
+              <div className="pt-2 flex flex-col sm:flex-row gap-2.5 w-full justify-center">
                 <Button
                   onClick={() => setShowComingSoon(false)}
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold h-12 px-6 rounded-2xl shadow-md"
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold h-11 px-6 rounded-2xl shadow-md text-xs sm:text-sm cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Platform Overview
@@ -234,9 +228,9 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                 <Button
                   onClick={onClose}
                   variant="outline"
-                  className="border-slate-200 text-slate-700 h-12 px-6 rounded-2xl font-semibold"
+                  className="border-slate-200 text-slate-700 h-11 px-6 rounded-2xl font-semibold text-xs sm:text-sm cursor-pointer"
                 >
-                  Close to Hub
+                  Close
                 </Button>
               </div>
             </div>
@@ -245,9 +239,9 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                PLATFORM INTRO & OVERVIEW VIEW
                ======================================================== */
             <>
-              {/* Header Banner */}
+              {/* Header Banner (Always Visible at Top) */}
               <div
-                className="p-6 sm:p-8 text-white relative overflow-hidden"
+                className="p-5 sm:p-7 text-white relative overflow-hidden shrink-0"
                 style={{
                   background: platform.accentColor
                     ? `linear-gradient(135deg, ${platform.accentColor} 0%, #0A0F1C 100%)`
@@ -256,15 +250,15 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
               >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="flex items-start justify-between gap-4 relative z-10">
-                  <div className="space-y-2">
-                    <div className="flex items-center flex-wrap gap-2">
+                <div className="flex items-start justify-between gap-3 relative z-10">
+                  <div className="space-y-1.5 min-w-0 flex-1">
+                    <div className="flex items-center flex-wrap gap-1.5">
                       {platform.category && (
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-md">
+                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/20 text-white backdrop-blur-md">
                           {platform.category}
                         </span>
                       )}
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider ${
                         status === 'live'
                           ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/40'
                           : 'bg-amber-500/30 text-amber-300 border border-amber-400/40'
@@ -272,51 +266,51 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                         {status === 'live' ? '🟢 Live Platform' : `🟡 ${status.replace('_', ' ')}`}
                       </span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">
                       {platform.name}
                     </h2>
                   </div>
 
                   <button
                     onClick={onClose}
-                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer"
+                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer"
                     aria-label="Close"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
 
-                <p className="mt-3 text-slate-200 text-sm sm:text-base leading-relaxed max-w-xl relative z-10">
+                <p className="mt-2 text-slate-200 text-xs sm:text-sm leading-relaxed max-w-xl relative z-10 line-clamp-2 sm:line-clamp-none">
                   {platform.description ||
                     platform.longDescription ||
                     'Access features, services, applications, and opportunities directly on this platform.'}
                 </p>
               </div>
 
-              {/* Body: What We Provide */}
-              <div className="p-6 sm:p-8 space-y-6 bg-white">
+              {/* Scrollable Body: Features & Actions */}
+              <div className="p-5 sm:p-7 space-y-5 bg-white overflow-y-auto flex-1">
                 <div>
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-blue-600" />
-                    What We Provide On This Platform:
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                    Key Capabilities & Services:
                   </h3>
 
-                  <div className="grid sm:grid-cols-2 gap-3.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {features.map((feature, idx) => {
                       const Icon = feature.icon;
                       return (
                         <div
                           key={idx}
-                          className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3 hover:bg-blue-50/50 hover:border-blue-100 transition-colors"
+                          className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-2.5 hover:bg-blue-50/50 hover:border-blue-100 transition-colors"
                         >
-                          <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold mt-0.5">
+                          <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold mt-0.5">
                             <Icon className="w-4 h-4" />
                           </div>
-                          <div className="overflow-hidden">
-                            <div className="text-sm font-bold text-slate-900 leading-snug">
+                          <div className="min-w-0">
+                            <div className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
                               {feature.title}
                             </div>
-                            <div className="text-xs text-slate-500 leading-relaxed mt-0.5">
+                            <div className="text-[11px] sm:text-xs text-slate-500 leading-relaxed mt-0.5">
                               {feature.desc}
                             </div>
                           </div>
@@ -326,12 +320,12 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                   </div>
                 </div>
 
-                {/* Launch Action Buttons — Direct "Go to Site", ZERO ACCESS FORMS */}
-                <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3.5">
+                {/* Launch Action Buttons */}
+                <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <Button
                     onClick={handleLaunch}
                     size="lg"
-                    className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-8 h-13 rounded-2xl shadow-lg shadow-blue-500/20 text-sm sm:text-base transition-all hover:scale-[1.02] border-0 cursor-pointer"
+                    className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-7 h-11 sm:h-12 rounded-2xl shadow-lg shadow-blue-500/20 text-xs sm:text-sm transition-all hover:scale-[1.02] border-0 cursor-pointer"
                   >
                     <span>Go to Site</span>
                     <ExternalLink className="w-4 h-4 ml-2" />
@@ -341,7 +335,7 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                     onClick={onClose}
                     variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto rounded-2xl h-13 border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold cursor-pointer"
+                    className="w-full sm:w-auto rounded-2xl h-11 sm:h-12 border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-xs sm:text-sm cursor-pointer"
                   >
                     Back to Gateway
                   </Button>
