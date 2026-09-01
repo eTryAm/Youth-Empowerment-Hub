@@ -4,7 +4,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   
   const staticPages = [
-    '', '/about', '/initiatives', '/platforms', '/opportunities',
+    '', '/about', '/initiatives', '/platforms',
     '/events', '/gallery', '/impact', '/get-involved', '/contact',
     '/privacy', '/terms',
   ];

@@ -95,9 +95,9 @@ export function Footer({ settings = {} }: FooterProps) {
             <h3 className="text-lg font-semibold text-white">Ecosystem Portals</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/opportunities" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors flex items-center gap-1.5">
+                <Link href="/platforms" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                  Opportunities Portal
+                  Digital Platforms & Ecosystem
                 </Link>
               </li>
               <li>

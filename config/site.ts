@@ -24,7 +24,6 @@ export const siteConfig = {
 
 export const defaultNavItems = [
   { label: 'Home', url: '/' },
-  { label: 'Opportunities', url: '/opportunities' },
   { label: 'Platforms', url: '/platforms' },
   { label: 'Initiatives', url: '/initiatives' },
   { label: 'Events', url: '/events' },

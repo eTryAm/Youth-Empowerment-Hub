@@ -166,14 +166,10 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
   const features = getPlatformFeatures(platform);
   const status = platform.status ?? 'live';
   const rawUrl = platform.url?.trim() || '';
-  const isInternalUrl = rawUrl.startsWith('/') || rawUrl === '/opportunities';
   const hasValidExternalUrl = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
 
   const handleLaunch = () => {
-    if (isInternalUrl) {
-      onClose();
-      router.push(rawUrl);
-    } else if (hasValidExternalUrl) {
+    if (hasValidExternalUrl) {
       window.open(rawUrl, '_blank', 'noopener,noreferrer');
     } else {
       setShowComingSoon(true);
@@ -331,7 +327,7 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                     size="lg"
                     className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-7 h-11 sm:h-12 rounded-2xl shadow-lg shadow-blue-500/20 text-xs sm:text-sm transition-all hover:scale-[1.02] border-0 cursor-pointer"
                   >
-                    <span>{isInternalUrl ? 'Open Opportunities Portal' : 'Go to Site'}</span>
+                    <span>Go to Site</span>
                     <ExternalLink className="w-4 h-4 ml-2" />
                   </Button>
 

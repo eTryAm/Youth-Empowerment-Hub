@@ -53,9 +53,9 @@ export default function NotFound() {
             variant="outline"
             className="w-full sm:w-auto h-12 px-6 rounded-2xl border-white/20 bg-white/5 hover:bg-white/10 text-slate-200 font-bold backdrop-blur-md"
           >
-            <Link href="/opportunities" className="flex items-center gap-2">
+            <Link href="/platforms" className="flex items-center gap-2">
               <Compass className="w-4 h-4" />
-              <span>Opportunities</span>
+              <span>Explore Platforms</span>
             </Link>
           </Button>
         </div>
