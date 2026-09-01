@@ -44,22 +44,32 @@ function getPlatformFeatures(platform: PlatformCardData) {
       {
         icon: GraduationCap,
         title: 'Want to Become Campus Ambassador?',
-        desc: 'Lead your college chapter, organize tech hackathons, clubs, and student networking.',
+        desc: 'Lead your college or university chapter, organize tech hackathons, clubs, and student networking.',
       },
       {
         icon: MapPin,
         title: 'Represent Your State & District',
-        desc: 'Official regional youth representative coordinating local summits and grassroots talent.',
+        desc: 'Official regional youth representative coordinating local summits, talent discovery, and grassroots initiatives.',
       },
       {
         icon: Users,
-        title: 'Volunteer in Flagship Events & Summits',
-        desc: 'Hands-on stage management, VIP delegate coordination, and national conference operations.',
+        title: 'Volunteer in Events & Flagship Summits',
+        desc: 'Hands-on stage management, VIP delegate coordination, keynote logistics, and media operations.',
+      },
+      {
+        icon: Trophy,
+        title: 'Organising Sports & Tournaments',
+        desc: 'Lead youth cricket leagues, athletic meetups, fitness marathons, and tournament management.',
+      },
+      {
+        icon: Globe,
+        title: 'Want to Be Part of the Community?',
+        desc: 'Connect, collaborate, and build with thousands of student developers, creators, and leaders across India.',
       },
       {
         icon: Gift,
         title: 'Exciting Rewards, Goodies & LORs',
-        desc: 'Official swag kits, hoodies, verified certificates, letters of recommendation, and stipends.',
+        desc: 'Official swag kits (T-Shirts, Hoodies, Badges), verified Certificates of Leadership, official LORs, and stipends.',
       },
     ];
   }
