@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -16,7 +17,11 @@ import {
   Trophy,
   Rocket,
   Clock,
-  ArrowLeft
+  ArrowLeft,
+  MapPin,
+  Users,
+  Gift,
+  Flame
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { PlatformCardData } from '@/components/public/platform-card';
@@ -33,82 +38,85 @@ function getPlatformFeatures(platform: PlatformCardData) {
   const slug = (platform.slug || '').toLowerCase();
   const category = (platform.category || '').toLowerCase();
 
-  if (name.includes('opportunity') || slug.includes('opportunity') || category.includes('career')) {
+  // 1. Opportunities & Leadership Portal
+  if (name.includes('opportunit') || slug.includes('opportunit') || category.includes('career') || category.includes('leader')) {
     return [
       {
-        icon: Briefcase,
-        title: 'Verified Job & Internship Openings',
-        desc: 'Direct access to verified corporate, startup, and NGO opportunities.',
-      },
-      {
         icon: GraduationCap,
-        title: 'Higher Education Grants & Scholarships',
-        desc: 'Merit and need-based financial aid and scholarship applications.',
+        title: 'Want to Become Campus Ambassador?',
+        desc: 'Lead your college chapter, organize tech hackathons, clubs, and student networking.',
       },
       {
-        icon: Zap,
-        title: 'Direct Online Applications & Tracking',
-        desc: 'Single-window application forms and real-time review updates.',
+        icon: MapPin,
+        title: 'Represent Your State & District',
+        desc: 'Official regional youth representative coordinating local summits and grassroots talent.',
       },
       {
-        icon: Award,
-        title: 'Mentorship & Professional Guidance',
-        desc: 'One-on-one sessions with industry leaders and career coaches.',
+        icon: Users,
+        title: 'Volunteer in Flagship Events & Summits',
+        desc: 'Hands-on stage management, VIP delegate coordination, and national conference operations.',
+      },
+      {
+        icon: Gift,
+        title: 'Exciting Rewards, Goodies & LORs',
+        desc: 'Official swag kits, hoodies, verified certificates, letters of recommendation, and stipends.',
       },
     ];
   }
 
+  // 2. BrainStorm Platform
   if (name.includes('brain') || slug.includes('brain') || category.includes('tech') || category.includes('education')) {
     return [
       {
         icon: BookOpen,
         title: 'Interactive Learning & Skill Labs',
-        desc: 'Hands-on modules covering modern technology, coding, and problem solving.',
+        desc: 'Hands-on coding modules, modern tech tracks, and practical problem solving.',
       },
       {
         icon: Zap,
-        title: 'Hackathons & Technical Competitions',
-        desc: 'Participate in innovation sprints and win community recognition.',
+        title: 'Hackathons & Technical Sprints',
+        desc: 'Participate in student innovation sprints and win community recognition.',
       },
       {
         icon: Award,
         title: 'Project Showcases & Peer Reviews',
-        desc: 'Build real-world projects and receive feedback from mentors.',
+        desc: 'Build real-world projects and receive feedback from engineering mentors.',
       },
       {
         icon: Globe,
         title: 'Digital Certifications & Badges',
-        desc: 'Earn verifiable credentials upon completing skill tracks.',
+        desc: 'Earn verifiable credentials upon completing practical technical tracks.',
       },
     ];
   }
 
+  // 3. CricketLive Platform
   if (name.includes('cricket') || slug.includes('cricket') || category.includes('sport')) {
     return [
       {
         icon: Trophy,
-        title: 'Live Tournament Scores & Schedules',
-        desc: 'Real-time updates, player statistics, and match leaderboards.',
+        title: 'Live Ball-by-Ball Cricket Scores',
+        desc: 'Real-time updates, match commentary, player stats, scorecards, and highlights.',
       },
       {
         icon: Zap,
-        title: 'Youth Athletic Development',
-        desc: 'Training regimens, fitness workshops, and coaching clinics.',
+        title: 'Youth Tournament & League Management',
+        desc: 'Team registrations, tournament fixtures, live point tables, and standings.',
       },
       {
         icon: Award,
-        title: 'Tournament Organization & Teams',
-        desc: 'Register teams, track points tables, and manage fixtures.',
+        title: 'Athletic Skill Clinics & Fitness Camps',
+        desc: 'Youth athletic development, coaching clinics, fitness regimens, and sportsmanship.',
       },
       {
         icon: Globe,
-        title: 'Community Sports Network',
-        desc: 'Connect with aspiring athletes, referees, and sporting academies.',
+        title: 'Tournament Accreditations & Gear',
+        desc: 'Official organizer kits, referee credentials, and sports equipment sponsorship.',
       },
     ];
   }
 
-  // Dynamic fallback for newly added admin platforms
+  // Dynamic fallback for custom platforms
   return [
     {
       icon: Sparkles,
@@ -134,6 +142,7 @@ function getPlatformFeatures(platform: PlatformCardData) {
 }
 
 export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroModalProps) {
+  const router = useRouter();
   const [showComingSoon, setShowComingSoon] = useState(false);
 
   useEffect(() => {
@@ -147,10 +156,14 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
   const features = getPlatformFeatures(platform);
   const status = platform.status ?? 'live';
   const rawUrl = platform.url?.trim() || '';
+  const isInternalUrl = rawUrl.startsWith('/') || rawUrl === '/opportunities';
   const hasValidExternalUrl = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
 
   const handleLaunch = () => {
-    if (hasValidExternalUrl) {
+    if (isInternalUrl) {
+      onClose();
+      router.push(rawUrl);
+    } else if (hasValidExternalUrl) {
       window.open(rawUrl, '_blank', 'noopener,noreferrer');
     } else {
       setShowComingSoon(true);
@@ -173,7 +186,7 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
         >
           {showComingSoon ? (
             /* ========================================================
-               BEAUTIFUL COMING SOON / IN PREPARATION DIALOG
+               COMING SOON DIALOG
                ======================================================== */
             <div className="p-6 sm:p-10 text-center flex flex-col items-center space-y-5 overflow-y-auto">
               <div className="relative">
@@ -196,25 +209,6 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                 <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
                   The live portal link and digital systems for <strong>{platform.name}</strong> are currently being finalized. Once deployed, the direct site link will open automatically from this gateway.
                 </p>
-              </div>
-
-              <div className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-left grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                  <span>Dedicated Independent Systems</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
-                  <span>Integrated Application Forms</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0" />
-                  <span>Direct Recruiter & Skill Access</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-violet-500 shrink-0" />
-                  <span>Official Organization Verified</span>
-                </div>
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row gap-2.5 w-full justify-center">
@@ -327,7 +321,7 @@ export function PlatformIntroModal({ platform, isOpen, onClose }: PlatformIntroM
                     size="lg"
                     className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-7 h-11 sm:h-12 rounded-2xl shadow-lg shadow-blue-500/20 text-xs sm:text-sm transition-all hover:scale-[1.02] border-0 cursor-pointer"
                   >
-                    <span>Go to Site</span>
+                    <span>{isInternalUrl ? 'Open Opportunities Portal' : 'Go to Site'}</span>
                     <ExternalLink className="w-4 h-4 ml-2" />
                   </Button>
 

@@ -164,15 +164,14 @@ export function Hero({ heroConfig, platforms = [] }: HeroProps) {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto justify-center"
         >
-          <button
-            type="button"
-            onClick={() => setActiveModalPlatform(opportunitiesPlatform)}
+          <Link
+            href="/opportunities"
             className="group w-full sm:w-auto flex h-12 sm:h-13 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 px-6 sm:px-7 text-sm sm:text-base font-bold text-white shadow-xl shadow-blue-500/25 transition-all duration-200 cursor-pointer"
           >
             <Briefcase className="h-4 w-4 sm:h-5 sm:w-5" />
             <span>Launch Opportunities Portal</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </button>
+          </Link>
           <Link
             href="/gallery"
             className="group w-full sm:w-auto flex h-12 sm:h-13 items-center justify-center gap-2 rounded-2xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 px-5 sm:px-6 text-sm sm:text-base font-semibold text-cyan-200 backdrop-blur-md transition-all duration-200"
@@ -200,9 +199,8 @@ export function Hero({ heroConfig, platforms = [] }: HeroProps) {
             Quick Launch Ecosystem Platforms:
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
-            <button
-              type="button"
-              onClick={() => setActiveModalPlatform(opportunitiesPlatform)}
+            <Link
+              href="/opportunities"
               className="flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-white/10 hover:bg-blue-600/30 border border-white/10 hover:border-blue-400/50 transition-all text-left group cursor-pointer"
             >
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0 font-bold group-hover:scale-105 transition-transform text-base sm:text-lg">
@@ -212,9 +210,9 @@ export function Hero({ heroConfig, platforms = [] }: HeroProps) {
                 <div className="text-xs sm:text-sm font-bold text-white group-hover:text-blue-300 transition-colors truncate">
                   Opportunities Portal
                 </div>
-                <div className="text-[11px] sm:text-xs text-slate-300 truncate">Jobs, Internships & Grants</div>
+                <div className="text-[11px] sm:text-xs text-slate-300 truncate">Ambassadors & Leadership</div>
               </div>
-            </button>
+            </Link>
 
             <button
               type="button"
