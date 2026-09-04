@@ -6,10 +6,35 @@ import { OutboundGate } from '@/components/public/outbound-gate';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { getPublicInitiatives } from '@/lib/public/queries';
 import { isExternalHref } from '@/lib/utils';
+import { JsonLd } from '@/components/seo/json-ld';
+import { webPageSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Initiatives',
-  description: 'Explore our programs and campaigns driving positive change.',
+  title: 'Initiatives & Programs — Youth Empowerment Hub',
+  description:
+    'Explore Youth Empowerment Hub initiatives and youth programs across India — digital literacy drives, skill bootcamps, community volunteering, sports development, entrepreneurship mentorship, and youth leadership campaigns.',
+  keywords: [
+    'youth initiatives India',
+    'youth empowerment programs',
+    'skill development initiatives',
+    'youth campaigns India',
+    'community youth programs',
+    'youth innovation projects',
+  ],
+  alternates: { canonical: '/initiatives' },
+  openGraph: {
+    title: 'Initiatives & Programs — Youth Empowerment Hub',
+    description:
+      'Explore programs and campaigns empowering young people across education, technology, sports, and leadership.',
+    url: '/initiatives',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Youth Empowerment Hub Initiatives' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Initiatives & Programs — Youth Empowerment Hub',
+    description: 'Explore youth programs and campaigns driving impact across India.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function InitiativesPage({
@@ -30,6 +55,18 @@ export default async function InitiativesPage({
 
   return (
     <div className="flex flex-col bg-slate-50">
+      <JsonLd
+        data={webPageSchema({
+          name: 'Initiatives & Programs — Youth Empowerment Hub',
+          description:
+            'Explore Youth Empowerment Hub initiatives and programs across India.',
+          url: 'https://youthempowerment.in/initiatives',
+          breadcrumb: [
+            { name: 'Home', url: 'https://youthempowerment.in' },
+            { name: 'Initiatives', url: 'https://youthempowerment.in/initiatives' },
+          ],
+        })}
+      />
       <PageHero
         title="Our Initiatives"
         subtitle="Discover the programs and campaigns we are running to empower youth."

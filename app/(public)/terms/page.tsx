@@ -2,8 +2,13 @@ import type { Metadata } from 'next';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 
 export const metadata: Metadata = {
-  title: 'Terms of Use | Youth Empowerment Hub',
-  description: 'Terms and conditions for using our platform.',
+  title: 'Terms of Use — Youth Empowerment Hub',
+  description: 'Terms and conditions for using the Youth Empowerment Hub platform.',
+  alternates: { canonical: '/terms' },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function TermsPage() {

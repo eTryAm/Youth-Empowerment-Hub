@@ -5,15 +5,52 @@ import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { Button } from '@/components/ui/button';
 import { Handshake, Building2, GraduationCap, Users2, ShieldCheck, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { JsonLd } from '@/components/seo/json-ld';
+import { webPageSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Partner With Us — Youth Empowerment Hub',
-  description: 'Collaborate with Youth Empowerment Hub to sponsor youth initiatives, host internships, or deliver educational programs.',
+  title: 'Partner With Us & Get Involved — Youth Empowerment Hub',
+  description:
+    'Collaborate with Youth Empowerment Hub to sponsor youth initiatives, host internships, conduct educational workshops, or become an institutional partner. Join our mission to empower India\'s youth.',
+  keywords: [
+    'partner with youth NGO India',
+    'sponsor youth initiatives',
+    'youth organization partnership',
+    'corporate youth sponsorship India',
+    'get involved youth empowerment',
+    'volunteer youth programs India',
+  ],
+  alternates: { canonical: '/get-involved' },
+  openGraph: {
+    title: 'Partner With Us & Get Involved — Youth Empowerment Hub',
+    description:
+      'Collaborate with our central organization to create scalable youth programs, host mentorship cohorts, and expand educational reach.',
+    url: '/get-involved',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Partner With Youth Empowerment Hub' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Partner With Us — Youth Empowerment Hub',
+    description: 'Partner with India\'s premier youth empowerment platform.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default function GetInvolvedPage() {
   return (
     <div className="flex flex-col">
+      <JsonLd
+        data={webPageSchema({
+          name: 'Partner With Us & Get Involved — Youth Empowerment Hub',
+          description:
+            'Collaborate with Youth Empowerment Hub to sponsor youth initiatives, host internships, or deliver educational programs.',
+          url: 'https://youthempowerment.in/get-involved',
+          breadcrumb: [
+            { name: 'Home', url: 'https://youthempowerment.in' },
+            { name: 'Get Involved', url: 'https://youthempowerment.in/get-involved' },
+          ],
+        })}
+      />
       <PageHero
         title="Partner With Us"
         subtitle="Collaborate with our central organization to create scalable youth programs, host mentorship cohorts, and expand educational reach."

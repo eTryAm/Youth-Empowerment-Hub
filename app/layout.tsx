@@ -19,34 +19,78 @@ export const metadata: Metadata = {
     template: '%s | Youth Empowerment Hub',
   },
   description:
-    'Empowering young people through education, skills, technology, opportunities, innovation, sports, community development, and social welfare.',
+    'Youth Empowerment Hub (YEH) is India\'s platform for youth empowerment — offering skill development programs, career opportunities, digital literacy, entrepreneurship support, community development, and sports initiatives for young people across India.',
   keywords: [
-    'youth empowerment',
-    'education',
-    'skill development',
-    'technology',
-    'career opportunities',
-    'entrepreneurship',
-    'innovation',
-    'digital literacy',
-    'community development',
+    // Core brand
+    'youth empowerment hub',
+    'YEH',
+    'youth empowerment India',
+    'youth development organization India',
+    'youth NGO India',
+    // Education & Skills
+    'skill development for youth India',
+    'youth education programs',
+    'digital literacy for youth',
+    'entrepreneurship for youth',
+    'career opportunities for students',
+    'campus ambassador program India',
+    'internship opportunities India',
+    'youth vocational training',
+    // Community
+    'youth community development',
+    'youth volunteer program India',
+    'youth leadership program',
+    'represent your state program',
+    'district representative youth',
+    // Sports
+    'youth sports development India',
+    'youth sports organization',
+    'sports tournament youth',
+    // Technology & Innovation
+    'youth technology platform',
+    'youth innovation hub',
+    'youth hackathon India',
+    'youth startup ecosystem',
+    // General
+    'youth programs India',
+    'empower youth',
+    'youth welfare organization',
+    'young people development',
+    'youth schemes India',
   ],
-  authors: [{ name: 'Youth Empowerment Hub' }],
+  authors: [{ name: 'Youth Empowerment Hub', url: process.env.NEXT_PUBLIC_SITE_URL || 'https://youthempowerment.in' }],
   creator: 'Youth Empowerment Hub',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  publisher: 'Youth Empowerment Hub',
+  category: 'Education & Youth Development',
+  classification: 'Non-Profit Organization',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://youthempowerment.in'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
+    url: '/',
     siteName: 'Youth Empowerment Hub',
     title: 'Youth Empowerment Hub — Empowering Youth. Building Skills. Creating Opportunities.',
     description:
-      'Empowering young people through education, skills, technology, opportunities, innovation, sports, community development, and social welfare.',
+      'India\'s platform for youth empowerment — skill development, career opportunities, digital literacy, entrepreneurship, sports, and community development for young people.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Youth Empowerment Hub — Empowering Youth. Building Skills. Creating Opportunities.',
+        type: 'image/jpeg',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Youth Empowerment Hub',
+    title: 'Youth Empowerment Hub — Empowering Youth. Building Skills. Creating Opportunities.',
     description:
-      'Empowering young people through education, skills, technology, opportunities, innovation, sports, community development, and social welfare.',
+      'India\'s platform for youth empowerment — skill development, career opportunities, digital literacy, and community development.',
+    images: ['/og-image.jpg'],
   },
   icons: {
     icon: [
@@ -60,9 +104,22 @@ export const metadata: Metadata = {
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
+  manifest: '/site.webmanifest',
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    // Add your Google Search Console verification code here:
+    // google: 'your-google-verification-code',
+    // yandex: 'your-yandex-code',
   },
 };
 

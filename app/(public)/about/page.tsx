@@ -5,10 +5,34 @@ import { SectionHeader } from '@/components/shared/section-header';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { getPublicObjectives } from '@/lib/public/queries';
 import { objectiveCategories } from '@/config/site';
+import { JsonLd } from '@/components/seo/json-ld';
+import { webPageSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'About',
-  description: 'Learn about our mission, vision, and objectives to empower the next generation.',
+  title: 'About Us — Mission, Vision & Values',
+  description:
+    'Learn about Youth Empowerment Hub — India\'s youth development organization dedicated to empowering young people through education, skill development, technology, entrepreneurship, sports, and community initiatives. Discover our mission, vision, and core objectives.',
+  keywords: [
+    'about youth empowerment hub',
+    'YEH mission vision',
+    'youth organization India',
+    'youth development mission',
+    'youth empowerment objectives',
+  ],
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'About Youth Empowerment Hub — Mission, Vision & Values',
+    description:
+      'India\'s platform for youth empowerment — empowering young people through education, skills, technology, and community development.',
+    url: '/about',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'About Youth Empowerment Hub' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Youth Empowerment Hub',
+    description: 'Learn about our mission to empower India\'s youth through education, skills, and opportunity.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function AboutPage() {
@@ -16,6 +40,18 @@ export default async function AboutPage() {
 
   return (
     <div className="flex flex-col">
+      <JsonLd
+        data={webPageSchema({
+          name: 'About Us — Mission, Vision & Values',
+          description:
+            'Learn about Youth Empowerment Hub — India\'s youth development organization dedicated to empowering young people.',
+          url: 'https://youthempowerment.in/about',
+          breadcrumb: [
+            { name: 'Home', url: 'https://youthempowerment.in' },
+            { name: 'About Us', url: 'https://youthempowerment.in/about' },
+          ],
+        })}
+      />
       <PageHero
         title="About Youth Empowerment Hub"
         subtitle="Empowering youth through access, opportunity, and collaboration to shape a brighter future."

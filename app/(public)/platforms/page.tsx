@@ -7,10 +7,36 @@ import { PlatformsDirectory } from '@/components/public/platforms-directory';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import Link from 'next/link';
+import { JsonLd } from '@/components/seo/json-ld';
+import { webPageSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Digital Ecosystem & Platforms — Youth Empowerment Hub',
-  description: 'Access the unified digital platforms designed to support youth across careers, education, sports, and community development.',
+  description:
+    'Access the unified digital platforms of Youth Empowerment Hub — Opportunities Portal for campus ambassadors and volunteers, BrainStorm for learning and tech, and CricketLive for live sports tournament management.',
+  keywords: [
+    'youth platforms India',
+    'youth empowerment ecosystem',
+    'opportunities portal youth',
+    'campus ambassador portal',
+    'volunteer opportunities portal',
+    'brainstorm youth platform',
+    'cricket live sports portal',
+  ],
+  alternates: { canonical: '/platforms' },
+  openGraph: {
+    title: 'Digital Ecosystem & Platforms — Youth Empowerment Hub',
+    description:
+      'Unified digital platforms powering career opportunities, tech education, and sports management for youth.',
+    url: '/platforms',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Youth Empowerment Hub Platforms' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Digital Ecosystem & Platforms — Youth Empowerment Hub',
+    description: 'Explore all digital portals and platforms for youth empowerment.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function PlatformsPage() {
@@ -18,6 +44,18 @@ export default async function PlatformsPage() {
 
   return (
     <div className="flex flex-col">
+      <JsonLd
+        data={webPageSchema({
+          name: 'Digital Ecosystem & Platforms — Youth Empowerment Hub',
+          description:
+            'Access the unified digital platforms designed to support youth across careers, education, sports, and community development.',
+          url: 'https://youthempowerment.in/platforms',
+          breadcrumb: [
+            { name: 'Home', url: 'https://youthempowerment.in' },
+            { name: 'Platforms', url: 'https://youthempowerment.in/platforms' },
+          ],
+        })}
+      />
       <PageHero
         title="Integrated Digital Ecosystem"
         subtitle="The central window and access point for all official portals, applications, and services operated by the Youth Empowerment Hub."

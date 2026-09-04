@@ -5,10 +5,35 @@ import { SectionHeader } from '@/components/shared/section-header';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { getPublicMetrics, getPublicTestimonials } from '@/lib/public/queries';
 import { ImpactStoriesSlider } from '@/components/public/impact-stories-slider';
+import { JsonLd } from '@/components/seo/json-ld';
+import { webPageSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Impact',
-  description: 'See how Youth Empowerment Hub is building opportunities for young people.',
+  title: 'Our Impact & Stories — Youth Empowerment Hub',
+  description:
+    'Discover the real-world impact of Youth Empowerment Hub — measurable outcomes in student training, youth skills development, community empowerment, career placements, and stories of youth transformation across India.',
+  keywords: [
+    'youth impact India',
+    'youth empowerment results',
+    'youth success stories',
+    'skill training impact',
+    'youth development outcomes',
+    'youth transformation India',
+  ],
+  alternates: { canonical: '/impact' },
+  openGraph: {
+    title: 'Our Impact & Stories — Youth Empowerment Hub',
+    description:
+      'Verified outcomes, metrics, and inspiring stories of young people empowered through our programs across India.',
+    url: '/impact',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Youth Empowerment Hub Impact' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Our Impact & Stories — Youth Empowerment Hub',
+    description: 'Real outcomes in youth skills, opportunities, and community transformation.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function ImpactPage() {
@@ -29,6 +54,18 @@ export default async function ImpactPage() {
 
   return (
     <div className="flex flex-col">
+      <JsonLd
+        data={webPageSchema({
+          name: 'Our Impact & Stories — Youth Empowerment Hub',
+          description:
+            'Discover the real-world impact of Youth Empowerment Hub — measurable outcomes and inspiring stories.',
+          url: 'https://youthempowerment.in/impact',
+          breadcrumb: [
+            { name: 'Home', url: 'https://youthempowerment.in' },
+            { name: 'Impact', url: 'https://youthempowerment.in/impact' },
+          ],
+        })}
+      />
       <PageHero
         title="Our Impact"
         subtitle="The real measure of our work is in lives changed and futures built. We share only verified, published outcomes."

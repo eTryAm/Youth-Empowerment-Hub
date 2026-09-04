@@ -7,10 +7,36 @@ import { OutboundGate } from '@/components/public/outbound-gate';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { formatEventLocation } from '@/lib/utils';
 import { getAllPublishedEvents } from '@/lib/public/queries';
+import { JsonLd } from '@/components/seo/json-ld';
+import { webPageSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Events & Workshops | Youth Empowerment Hub',
-  description: 'Explore upcoming youth events, technology workshops, leadership summits, and sports tournaments.',
+  title: 'Events & Workshops — Youth Empowerment Hub',
+  description:
+    'Join upcoming youth events, hackathons, skill-building workshops, athletic meets, and leadership conferences organized by Youth Empowerment Hub across India. Register for free.',
+  keywords: [
+    'youth events India',
+    'youth workshops India',
+    'student hackathon India',
+    'youth sports tournaments',
+    'leadership summit youth',
+    'free workshops for youth',
+    'youth empowerment events',
+  ],
+  alternates: { canonical: '/events' },
+  openGraph: {
+    title: 'Events & Workshops — Youth Empowerment Hub',
+    description:
+      'Join upcoming youth hackathons, skill bootcamps, and community forums. Register and participate across India.',
+    url: '/events',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Youth Empowerment Hub Events' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Events & Workshops — Youth Empowerment Hub',
+    description: 'Upcoming youth hackathons, workshops, and sports tournaments across India.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function EventsPage({
@@ -35,6 +61,18 @@ export default async function EventsPage({
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50/70">
+      <JsonLd
+        data={webPageSchema({
+          name: 'Events & Workshops — Youth Empowerment Hub',
+          description:
+            'Explore upcoming youth events, technology workshops, leadership summits, and sports tournaments.',
+          url: 'https://youthempowerment.in/events',
+          breadcrumb: [
+            { name: 'Home', url: 'https://youthempowerment.in' },
+            { name: 'Events', url: 'https://youthempowerment.in/events' },
+          ],
+        })}
+      />
       <PageHero
         title="Events & Workshops"
         subtitle="Connect, learn, and grow through interactive hackathons, skill bootcamps, and community forums."

@@ -3,10 +3,34 @@ import { Camera, Video, Sparkles, Award, Users } from 'lucide-react';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { getPublicGalleryItems } from '@/lib/public/queries';
 import { GalleryClient } from './gallery-client';
+import { JsonLd } from '@/components/seo/json-ld';
+import { webPageSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Gallery & Event Glimpses | Youth Empowerment Hub',
-  description: 'Explore photos, video clips, and glimpses of youth hackathons, innovation summits, workshops, and community events.',
+  title: 'Gallery & Event Glimpses — Youth Empowerment Hub',
+  description:
+    'Explore photos, videos, and visual highlights from Youth Empowerment Hub events — hackathons, innovation summits, skills workshops, sports meets, and community outreach across India.',
+  keywords: [
+    'youth events gallery',
+    'hackathon photos India',
+    'youth summit photos',
+    'workshop highlights youth',
+    'youth empowerment hub gallery',
+  ],
+  alternates: { canonical: '/gallery' },
+  openGraph: {
+    title: 'Gallery & Event Glimpses — Youth Empowerment Hub',
+    description:
+      'Explore photos, video clips, and glimpses of youth hackathons, innovation summits, workshops, and community events.',
+    url: '/gallery',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Youth Empowerment Hub Gallery' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Gallery & Event Glimpses — Youth Empowerment Hub',
+    description: 'Visual highlights from hackathons, workshops, and youth events.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export const dynamic = 'force-dynamic';
@@ -19,6 +43,18 @@ export default async function GalleryPage() {
 
   return (
     <div className="flex flex-col">
+      <JsonLd
+        data={webPageSchema({
+          name: 'Gallery & Event Glimpses — Youth Empowerment Hub',
+          description:
+            'Explore photos, video clips, and glimpses of youth hackathons, innovation summits, workshops, and community events.',
+          url: 'https://youthempowerment.in/gallery',
+          breadcrumb: [
+            { name: 'Home', url: 'https://youthempowerment.in' },
+            { name: 'Gallery', url: 'https://youthempowerment.in/gallery' },
+          ],
+        })}
+      />
       {/* Rich Gallery Hero Section */}
       <section className="relative overflow-hidden bg-[#0A0F1C] text-white px-4 pt-16 pb-16 md:pt-24 md:pb-20">
         <div className="absolute inset-0 mesh-bg opacity-30 mix-blend-screen pointer-events-none" />

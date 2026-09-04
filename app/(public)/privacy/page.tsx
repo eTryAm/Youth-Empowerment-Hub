@@ -2,8 +2,13 @@ import type { Metadata } from 'next';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Youth Empowerment Hub',
-  description: 'Our privacy policy and data handling practices.',
+  title: 'Privacy Policy — Youth Empowerment Hub',
+  description: 'Privacy policy and data protection practices of Youth Empowerment Hub.',
+  alternates: { canonical: '/privacy' },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function PrivacyPage() {

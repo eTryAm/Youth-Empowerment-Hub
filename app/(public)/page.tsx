@@ -25,6 +25,8 @@ import {
   getPublicTestimonials,
 } from '@/lib/public/queries';
 import { siteConfig } from '@/config/site';
+import { JsonLd } from '@/components/seo/json-ld';
+import { organizationSchema, websiteSchema } from '@/components/seo/schema';
 
 export default async function HomePage() {
   const [
@@ -89,6 +91,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col space-y-0">
+      <JsonLd data={[organizationSchema, websiteSchema]} />
       {isVisible('hero') ? (
         <Hero
           heroConfig={{

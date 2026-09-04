@@ -5,10 +5,34 @@ import { ContactForm } from '@/components/public/contact-form';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { getPublicSettings } from '@/lib/public/queries';
 import { resolveContactCategory } from '@/lib/public/contact';
+import { JsonLd } from '@/components/seo/json-ld';
+import { webPageSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
-  title: 'Contact',
-  description: 'Have questions or want to collaborate? We would love to hear from you.',
+  title: 'Contact Us — Youth Empowerment Hub',
+  description:
+    'Get in touch with the Youth Empowerment Hub team. Reach out for student partnerships, volunteer opportunities, event collaborations, media inquiries, or general support.',
+  keywords: [
+    'contact youth empowerment hub',
+    'reach youth organization India',
+    'youth NGO contact',
+    'volunteer inquiry India',
+    'partnership inquiry youth',
+  ],
+  alternates: { canonical: '/contact' },
+  openGraph: {
+    title: 'Contact Us — Youth Empowerment Hub',
+    description:
+      'Have questions or want to collaborate? Connect with the Youth Empowerment Hub team across India.',
+    url: '/contact',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Contact Youth Empowerment Hub' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact Us — Youth Empowerment Hub',
+    description: 'Get in touch with our team for collaborations, volunteering, and queries.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function ContactPage({
@@ -24,6 +48,18 @@ export default async function ContactPage({
 
   return (
     <div className="flex flex-col bg-slate-50">
+      <JsonLd
+        data={webPageSchema({
+          name: 'Contact Us — Youth Empowerment Hub',
+          description:
+            'Have questions or want to collaborate? We would love to hear from you.',
+          url: 'https://youthempowerment.in/contact',
+          breadcrumb: [
+            { name: 'Home', url: 'https://youthempowerment.in' },
+            { name: 'Contact', url: 'https://youthempowerment.in/contact' },
+          ],
+        })}
+      />
       <PageHero
         title="Contact Us"
         subtitle="Have questions or want to collaborate? Send a message and our team will get back to you."
