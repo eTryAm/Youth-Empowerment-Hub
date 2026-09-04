@@ -1,9 +1,11 @@
-﻿/**
+/**
  * Pre-built JSON-LD schema objects for Youth Empowerment Hub.
  * Used with the <JsonLd> component for structured data injection.
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://youthempowerment.in';
+import { getSiteUrl } from '@/lib/site-url';
+
+const BASE_URL = getSiteUrl();
 const LOGO_URL = `${BASE_URL}/icon-512.png`;
 const OG_IMAGE  = `${BASE_URL}/og-image.jpg`;
 
@@ -92,27 +94,40 @@ export function breadcrumbSchema(
 export function webPageSchema({
   name,
   description,
+  path = '',
   url,
   breadcrumb,
 }: {
   name: string;
   description: string;
-  url: string;
-  breadcrumb?: Array<{ name: string; url: string }>;
+  path?: string;
+  url?: string;
+  breadcrumb?: Array<{ name: string; url?: string; path?: string }>;
 }) {
+  const fullUrl = url
+    ? url.replace(/^https?:\/\/[^/]+/, BASE_URL)
+    : `${BASE_URL}${path}`;
+
+  const breadcrumbItems = breadcrumb?.map((b) => ({
+    name: b.name,
+    url: b.url
+      ? b.url.replace(/^https?:\/\/[^/]+/, BASE_URL)
+      : `${BASE_URL}${b.path || ''}`,
+  }));
+
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    '@id': `${url}#webpage`,
-    url,
+    '@id': `${fullUrl}#webpage`,
+    url: fullUrl,
     name,
     description,
     isPartOf: { '@id': `${BASE_URL}/#website` },
     publisher: { '@id': `${BASE_URL}/#organization` },
     inLanguage: 'en-IN',
-    ...(breadcrumb
+    ...(breadcrumbItems
       ? {
-          breadcrumb: breadcrumbSchema(breadcrumb),
+          breadcrumb: breadcrumbSchema(breadcrumbItems),
         }
       : {}),
   };

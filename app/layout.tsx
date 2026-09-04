@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
+import { getSiteUrl } from '@/lib/site-url';
 import './globals.css';
 
 const geistSans = Geist({
@@ -58,12 +59,12 @@ export const metadata: Metadata = {
     'young people development',
     'youth schemes India',
   ],
-  authors: [{ name: 'Youth Empowerment Hub', url: process.env.NEXT_PUBLIC_SITE_URL || 'https://youthempowerment.in' }],
+  authors: [{ name: 'Youth Empowerment Hub', url: getSiteUrl() }],
   creator: 'Youth Empowerment Hub',
   publisher: 'Youth Empowerment Hub',
   category: 'Education & Youth Development',
   classification: 'Non-Profit Organization',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://youthempowerment.in'),
+  metadataBase: new URL(getSiteUrl()),
   alternates: {
     canonical: '/',
   },
