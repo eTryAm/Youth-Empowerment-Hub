@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Bell, Megaphone, Sparkles, ArrowRight, ExternalLink } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Bell, Megaphone, Sparkles, ArrowRight, ExternalLink, CheckCheck } from 'lucide-react';
 import Link from 'next/link';
 import {
   DropdownMenu,
@@ -25,19 +25,70 @@ interface NotificationsPopoverProps {
   notifications?: NotificationItem[];
 }
 
+const STORAGE_KEY = 'yeh_notifications_last_seen_id';
+
 export function NotificationsPopover({ notifications = [] }: NotificationsPopoverProps) {
   const [open, setOpen] = useState(false);
+  const [hasSeen, setHasSeen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
   const count = notifications.length;
+  const latestId = notifications[0]?.id;
+
+  // On mount, check if the current notifications have already been seen
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      if (latestId) {
+        const storedId = localStorage.getItem(STORAGE_KEY);
+        if (storedId === latestId) {
+          setHasSeen(true);
+        }
+      }
+    } catch {
+      // Ignore localStorage errors (e.g. private browsing)
+    }
+  }, [latestId]);
+
+  // When user opens the popover, mark notifications as seen and clear the badge number
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (nextOpen && !hasSeen) {
+      setHasSeen(true);
+      try {
+        if (latestId) {
+          localStorage.setItem(STORAGE_KEY, latestId);
+        }
+      } catch {
+        // Ignore
+      }
+    }
+  };
+
+  const handleMarkAllRead = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setHasSeen(true);
+    try {
+      if (latestId) {
+        localStorage.setItem(STORAGE_KEY, latestId);
+      }
+    } catch {
+      // Ignore
+    }
+  };
+
+  // Only show the badge count if there are notifications AND the user hasn't seen them yet
+  const showBadge = isMounted ? (count > 0 && !hasSeen) : (count > 0);
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={handleOpenChange}>
       <DropdownMenuTrigger asChild>
         <button
           className="relative p-2 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-all focus:outline-none cursor-pointer flex items-center justify-center"
-          aria-label={`View notifications (${count} available)`}
+          aria-label={`View notifications ${showBadge ? `(${count} new)` : ''}`}
         >
           <Bell className="w-5 h-5 transition-transform hover:rotate-12" />
-          {count > 0 && (
+          {showBadge && (
             <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center pointer-events-none">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-gradient-to-r from-blue-500 to-cyan-400 text-[9px] font-black text-slate-950 items-center justify-center shadow-sm">
@@ -65,9 +116,24 @@ export function NotificationsPopover({ notifications = [] }: NotificationsPopove
             </div>
           </div>
           {count > 0 && (
-            <Badge className="bg-blue-600 text-white hover:bg-blue-600 text-xs font-bold px-2 py-0.5 rounded-full">
-              {count} New
-            </Badge>
+            !hasSeen ? (
+              <div className="flex items-center gap-2">
+                <Badge className="bg-blue-600 text-white hover:bg-blue-600 text-xs font-bold px-2 py-0.5 rounded-full">
+                  {count} New
+                </Badge>
+                <button
+                  type="button"
+                  onClick={handleMarkAllRead}
+                  className="text-[11px] font-semibold text-blue-400 hover:text-blue-300 underline cursor-pointer"
+                >
+                  Clear
+                </button>
+              </div>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                <CheckCheck className="w-3 h-3" /> Seen
+              </span>
+            )
           )}
         </div>
 

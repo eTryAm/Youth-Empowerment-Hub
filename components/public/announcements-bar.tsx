@@ -9,6 +9,7 @@ interface AnnouncementsBarProps {
     title: string;
     description?: string;
     externalUrl?: string;
+    date?: Date | string | null;
   };
 }
 
@@ -16,8 +17,20 @@ export function AnnouncementsBar({ announcement }: AnnouncementsBarProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Only show if there's an announcement and it hasn't been dismissed in this session
+    // Only show if there's an announcement, its last date has not passed, and hasn't been dismissed in this session
     if (announcement) {
+      if (announcement.date) {
+        const d = new Date(announcement.date);
+        if (!isNaN(d.getTime())) {
+          const endOfDay = new Date(d);
+          endOfDay.setHours(23, 59, 59, 999);
+          if (Date.now() > endOfDay.getTime()) {
+            setIsVisible(false);
+            return;
+          }
+        }
+      }
+
       const dismissed = sessionStorage.getItem('announcement-dismissed');
       if (dismissed !== announcement.title) {
         setIsVisible(true);

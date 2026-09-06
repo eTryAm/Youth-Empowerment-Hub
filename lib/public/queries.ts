@@ -81,21 +81,26 @@ export async function getHomepageSectionVisibility() {
 
 export async function getActiveAnnouncement() {
   try {
-    const featured = await db
-      .select()
-      .from(announcements)
-      .where(and(eq(announcements.status, 'published'), eq(announcements.featured, true)))
-      .orderBy(desc(announcements.createdAt))
-      .limit(1);
-    if (featured[0]) return featured[0];
-
-    const latest = await db
+    const published = await db
       .select()
       .from(announcements)
       .where(eq(announcements.status, 'published'))
-      .orderBy(desc(announcements.createdAt))
-      .limit(1);
-    return latest[0] ?? null;
+      .orderBy(desc(announcements.featured), desc(announcements.createdAt))
+      .limit(10);
+
+    const now = Date.now();
+    // Return the first published announcement whose event / announcement last date has not passed
+    const active = published.find((item) => {
+      if (!item.date) return true; // General notice with no expiration date
+      const d = new Date(item.date);
+      if (isNaN(d.getTime())) return true;
+      // Active until the end of that day (23:59:59.999)
+      const endOfDay = new Date(d);
+      endOfDay.setHours(23, 59, 59, 999);
+      return now <= endOfDay.getTime();
+    });
+
+    return active ?? null;
   } catch (error) {
     console.error('[getActiveAnnouncement]', error);
     return null;

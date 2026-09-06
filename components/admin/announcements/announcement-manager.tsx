@@ -160,6 +160,35 @@ export default function AnnouncementManager({ initialData = [] }: { initialData:
       )
     },
     {
+      accessorKey: 'date',
+      header: 'Event / Last Date',
+      cell: ({ row }: any) => {
+        const itemDate = row.original.date ? new Date(row.original.date) : null;
+        if (!itemDate || isNaN(itemDate.getTime())) {
+          return <span className="text-xs text-slate-400">Not set (Always Active)</span>;
+        }
+        const endOfDay = new Date(itemDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        const isExpired = Date.now() > endOfDay.getTime();
+        return (
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-slate-700 font-medium">
+              {itemDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+            </span>
+            {isExpired ? (
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-600 border border-rose-200">
+                Expired
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 border border-emerald-200">
+                Active
+              </span>
+            )}
+          </div>
+        );
+      }
+    },
+    {
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }: any) => {
@@ -308,6 +337,20 @@ export default function AnnouncementManager({ initialData = [] }: { initialData:
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="date" className="text-slate-900 font-semibold">Event / Last Date (Expiry Date)</Label>
+              <Input 
+                id="date" 
+                type="date"
+                value={formData.date} 
+                onChange={(e) => setFormData({...formData, date: e.target.value})} 
+                className="bg-white border-slate-200 text-slate-900 focus:border-blue-500 rounded-xl"
+              />
+              <p className="text-[11px] text-slate-500">
+                If specified, the top announcement banner will automatically be removed once this date has passed.
+              </p>
             </div>
 
             <div className="space-y-1.5">

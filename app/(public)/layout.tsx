@@ -30,6 +30,7 @@ export default async function PublicLayout({ children }: LayoutProps<'/'>) {
             title: announcement.title,
             description: announcement.description ?? undefined,
             externalUrl: announcement.externalUrl ?? undefined,
+            date: announcement.date ?? undefined,
           }}
         />
       ) : null}
