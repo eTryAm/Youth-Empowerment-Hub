@@ -69,8 +69,9 @@ export function DonationModal({
           </div>
           
           <DialogDescription className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-            We are currently finalizing our official <strong>Razorpay 80G Tax-Exempt NGO Gateway</strong> for instant UPI (GPay, PhonePe, Paytm), Cards, and Netbanking contributions.
+            We are setting up our official contribution gateway to support student activities, open coding workshops, and community youth initiatives.
           </DialogDescription>
+
         </DialogHeader>
 
         <div className="space-y-4 my-1">

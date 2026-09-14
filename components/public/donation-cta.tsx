@@ -198,8 +198,9 @@ export function DonationCta({ donationEnabled, donationUrl }: DonationCtaProps) 
               </span>
               <span className="flex items-center gap-1.5">
                 <Building2 className="w-4 h-4 text-amber-400" />
-                NGO & Institutional Backing
+                Student & Community Supported
               </span>
+
             </div>
           </div>
         </div>

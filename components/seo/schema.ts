@@ -25,7 +25,8 @@ export const organizationSchema = {
   },
   image: OG_IMAGE,
   description:
-    'Youth Empowerment Hub is an organization dedicated to empowering young people across India through education, skill development, technology, entrepreneurship, sports, and community building.',
+    'Youth Empowerment Hub is an independent student-led initiative focused on youth development, skills, opportunities, participation and community building.',
+
   foundingDate: '2024',
   areaServed: {
     '@type': 'Country',

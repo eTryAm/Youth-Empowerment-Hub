@@ -16,18 +16,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Youth Empowerment Hub — Empowering Youth. Building Skills. Creating Opportunities.',
+    default: 'Youth Empowerment Hub | Student-Led Youth Development Initiative',
     template: '%s | Youth Empowerment Hub',
   },
   description:
-    'Youth Empowerment Hub (YEH) is India\'s platform for youth empowerment — offering skill development programs, career opportunities, digital literacy, entrepreneurship support, community development, and sports initiatives for young people across India.',
+    'Youth Empowerment Hub is an independent student-led initiative focused on youth development, skills, opportunities, participation and community building.',
   keywords: [
     // Core brand
     'youth empowerment hub',
     'YEH',
     'youth empowerment India',
-    'youth development organization India',
-    'youth NGO India',
+    'student-led initiative India',
+    'youth development initiative India',
     // Education & Skills
     'skill development for youth India',
     'youth education programs',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     // General
     'youth programs India',
     'empower youth',
-    'youth welfare organization',
+    'youth welfare initiative',
     'young people development',
     'youth schemes India',
   ],
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   creator: 'Youth Empowerment Hub',
   publisher: 'Youth Empowerment Hub',
   category: 'Education & Youth Development',
-  classification: 'Non-Profit Organization',
+  classification: 'Student & Youth Development Initiative',
   metadataBase: new URL(getSiteUrl()),
   alternates: {
     canonical: '/',
@@ -73,26 +73,27 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: '/',
     siteName: 'Youth Empowerment Hub',
-    title: 'Youth Empowerment Hub — Empowering Youth. Building Skills. Creating Opportunities.',
+    title: 'Youth Empowerment Hub | Student-Led Youth Development Initiative',
     description:
-      'India\'s platform for youth empowerment — skill development, career opportunities, digital literacy, entrepreneurship, sports, and community development for young people.',
+      'Youth Empowerment Hub is an independent student-led initiative focused on youth development, skills, opportunities, participation and community building.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Youth Empowerment Hub — Empowering Youth. Building Skills. Creating Opportunities.',
+        alt: 'Youth Empowerment Hub | Student-Led Youth Development Initiative',
         type: 'image/jpeg',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Youth Empowerment Hub — Empowering Youth. Building Skills. Creating Opportunities.',
+    title: 'Youth Empowerment Hub | Student-Led Youth Development Initiative',
     description:
-      'India\'s platform for youth empowerment — skill development, career opportunities, digital literacy, and community development.',
+      'Youth Empowerment Hub is an independent student-led initiative focused on youth development, skills, opportunities, participation and community building.',
     images: ['/og-image.jpg'],
   },
+
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },

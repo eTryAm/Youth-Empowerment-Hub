@@ -50,14 +50,15 @@ export function GetInvolvedSection() {
                   },
                   {
                     icon: Users2,
-                    title: 'Community NGOs',
+                    title: 'Community Initiatives',
                     desc: 'Grassroots welfare & skill outreach',
                   },
                   {
                     icon: ShieldCheck,
-                    title: 'Certified Programs',
-                    desc: 'Co-branded badges & career tracks',
+                    title: 'Skill Programs',
+                    desc: 'Peer workshops & learning tracks',
                   },
+
                 ].map((item, idx) => {
                   const Icon = item.icon;
                   return (

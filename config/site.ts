@@ -1,8 +1,9 @@
 export const siteConfig = {
   name: 'Youth Empowerment Hub',
   shortName: 'YEH',
-  description: 'Empowering young people through education, skills, technology, opportunities, innovation, sports, community development, and social welfare.',
-  tagline: 'Empowering Youth. Building Skills. Creating Opportunities. Shaping the Future.',
+  description: 'Youth Empowerment Hub is an independent student-led initiative focused on youth development, skills, opportunities, participation and community building.',
+  tagline: 'Empowering Young Minds to Learn, Participate & Grow.',
+
   url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   ogImage: '/images/logo.png',
   creator: 'Youth Empowerment Hub',

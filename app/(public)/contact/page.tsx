@@ -15,8 +15,9 @@ export const metadata: Metadata = {
   keywords: [
     'contact youth empowerment hub',
     'reach youth organization India',
-    'youth NGO contact',
+    'youth initiative contact',
     'volunteer inquiry India',
+
     'partnership inquiry youth',
   ],
   alternates: { canonical: '/contact' },

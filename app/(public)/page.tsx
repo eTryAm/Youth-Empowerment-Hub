@@ -1,28 +1,24 @@
 import { Hero } from '@/components/public/hero';
-import { MissionSection } from '@/components/public/mission-section';
-import { ObjectivesSection } from '@/components/public/objectives-section';
-import { PlatformsSection } from '@/components/public/platforms-section';
-import { InitiativesSection } from '@/components/public/initiatives-section';
+import { TrustStrip } from '@/components/public/trust-strip';
+import { WhatIsYehSection } from '@/components/public/what-is-yeh-section';
+import { WhyStartedSection } from '@/components/public/why-started-section';
+import { EcosystemBuildingSection } from '@/components/public/ecosystem-building-section';
 import { EventsSection } from '@/components/public/events-section';
-import { GalleryGlimpsesSection } from '@/components/public/gallery-glimpses-section';
-import { FutureVisionSection } from '@/components/public/future-vision-section';
 import { ImpactSection } from '@/components/public/impact-section';
-import { GetInvolvedSection } from '@/components/public/get-involved-section';
-import { TestimonialsSection } from '@/components/public/testimonials-section';
-import { PartnersSection } from '@/components/public/partners-section';
+import { ParticipationRolesSection } from '@/components/public/participation-roles-section';
+import { AmbassadorSpotlightSection } from '@/components/public/ambassador-spotlight-section';
+import { TransparencyStatusSection } from '@/components/public/transparency-status-section';
+import { FutureRoadmapSection } from '@/components/public/future-roadmap-section';
+import { AccountabilitySection } from '@/components/public/accountability-section';
+import { FinalJoinCta } from '@/components/public/final-join-cta';
 import { DonationCta } from '@/components/public/donation-cta';
 import {
   getHomepageSectionVisibility,
   getPublicEvents,
   getPublicFeatureFlags,
-  getPublicGalleryItems,
-  getPublicInitiatives,
   getPublicMetrics,
-  getPublicObjectives,
-  getPublicPartners,
   getPublicPlatforms,
   getPublicSettings,
-  getPublicTestimonials,
 } from '@/lib/public/queries';
 import { siteConfig } from '@/config/site';
 import { JsonLd } from '@/components/seo/json-ld';
@@ -34,64 +30,22 @@ export default async function HomePage() {
     flags,
     { isVisible },
     dbPlatforms,
-    dbObjectives,
-    dbInitiatives,
     dbEvents,
-    dbGalleryItems,
     dbMetrics,
-    dbTestimonials,
-    dbPartners,
   ] = await Promise.all([
     getPublicSettings(),
     getPublicFeatureFlags(),
     getHomepageSectionVisibility(),
     getPublicPlatforms(),
-    getPublicObjectives(),
-    getPublicInitiatives(),
     getPublicEvents({ upcomingOnly: true }),
-    getPublicGalleryItems(),
     getPublicMetrics(),
-    getPublicTestimonials(),
-    getPublicPartners(),
   ]);
 
-  const objectives = dbObjectives.map((o) => ({
-    id: o.id,
-    text: o.text,
-    category: o.category,
-    icon: o.icon ?? undefined,
-  }));
-
-  const initiatives = dbInitiatives.map((i) => ({
-    id: i.id,
-    title: i.title,
-    description: i.description ?? '',
-    category: i.category ?? 'General',
-    status: i.status ?? 'Active',
-    icon: i.icon ?? undefined,
-    url: i.ctaUrl ?? undefined,
-  }));
-
-  const testimonials = dbTestimonials.map((t) => ({
-    id: t.id,
-    quote: t.testimonialText,
-    name: t.personName,
-    designation: t.designation ?? '',
-    organization: t.organization ?? undefined,
-    avatarUrl: t.photoUrl ?? undefined,
-    rating: t.rating ?? 5,
-  }));
-
-  const partners = dbPartners.map((p) => ({
-    id: p.id,
-    name: p.name,
-    logoUrl: p.logoUrl ?? '',
-    websiteUrl: p.website ?? undefined,
-  }));
-
   return (
-    <div className="flex flex-col space-y-0">
+    <div className="flex flex-col space-y-0 overflow-x-hidden">
       <JsonLd data={[organizationSchema, websiteSchema]} />
+
+      {/* 1. Hero Section */}
       {isVisible('hero') ? (
         <Hero
           heroConfig={{
@@ -102,42 +56,51 @@ export default async function HomePage() {
         />
       ) : null}
 
-      {isVisible('platforms') ? <PlatformsSection platforms={dbPlatforms} /> : null}
+      {/* 2. Trust & Positioning Strip */}
+      <TrustStrip />
 
-      {isVisible('mission') ? <MissionSection /> : null}
+      {/* 3. What is YEH? */}
+      {isVisible('mission') ? <WhatIsYehSection /> : null}
 
-      {isVisible('objectives') && objectives.length > 0 ? (
-        <ObjectivesSection objectives={objectives} />
+      {/* 4. Why We Started */}
+      {isVisible('objectives') ? <WhyStartedSection /> : null}
+
+      {/* 5. What We Are Building & Digital Ecosystem */}
+      {isVisible('platforms') ? (
+        <EcosystemBuildingSection platforms={dbPlatforms} />
       ) : null}
 
-      {isVisible('initiatives') && initiatives.length > 0 ? (
-        <InitiativesSection initiatives={initiatives} />
-      ) : null}
-
+      {/* 6. Dynamic Upcoming Events (if active in database) */}
       {isVisible('events') && flags.events_enabled !== false && dbEvents.length > 0 ? (
         <EventsSection events={dbEvents} />
       ) : null}
 
-      {isVisible('gallery') && flags.gallery_enabled !== false && dbGalleryItems.length > 0 ? (
-        <GalleryGlimpsesSection items={dbGalleryItems} />
+      {/* 7. Admin-Controlled Verified Milestones & Reach */}
+      {isVisible('impact') && dbMetrics.length > 0 ? (
+        <ImpactSection metrics={dbMetrics} />
       ) : null}
 
-      {isVisible('future_vision') ? <FutureVisionSection /> : null}
-
-      {isVisible('impact') ? <ImpactSection metrics={dbMetrics} /> : null}
-
+      {/* 8. How Students Can Participate */}
       {isVisible('get_involved') && flags.get_involved_enabled !== false ? (
-        <GetInvolvedSection />
+        <ParticipationRolesSection />
       ) : null}
 
-      {isVisible('testimonials') && flags.testimonials_enabled !== false ? (
-        <TestimonialsSection testimonials={testimonials} />
-      ) : null}
+      {/* 9. Campus Ambassador Spotlight Callout */}
+      <AmbassadorSpotlightSection />
 
-      {isVisible('partners') && flags.partners_enabled !== false && partners.length > 0 ? (
-        <PartnersSection partners={partners} />
-      ) : null}
+      {/* 10. Dedicated Transparency Commitment & Current Stage */}
+      <TransparencyStatusSection />
 
+      {/* 11. Progressive Future Vision Roadmap */}
+      {isVisible('future_vision') ? <FutureRoadmapSection /> : null}
+
+      {/* 12. Trust & Accountability Mechanisms */}
+      <AccountabilitySection />
+
+      {/* 13. Final CTA Banner */}
+      <FinalJoinCta />
+
+      {/* 14. Optional Community Contribution CTA (if enabled by admin) */}
       {isVisible('donation_cta') && flags.donation_enabled ? (
         <DonationCta
           donationEnabled={Boolean(flags.donation_enabled)}

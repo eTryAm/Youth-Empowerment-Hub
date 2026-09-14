@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     'Collaborate with Youth Empowerment Hub to sponsor youth initiatives, host internships, conduct educational workshops, or become an institutional partner. Join our mission to empower India\'s youth.',
   keywords: [
-    'partner with youth NGO India',
+    'partner with youth initiative India',
     'sponsor youth initiatives',
     'youth organization partnership',
     'corporate youth sponsorship India',
@@ -24,14 +24,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Partner With Us & Get Involved — Youth Empowerment Hub',
     description:
-      'Collaborate with our central organization to create scalable youth programs, host mentorship cohorts, and expand educational reach.',
+      'Collaborate with our initiative to create scalable youth programs, host mentorship cohorts, and expand educational reach.',
     url: '/get-involved',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Partner With Youth Empowerment Hub' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Partner With Us — Youth Empowerment Hub',
-    description: 'Partner with India\'s premier youth empowerment platform.',
+    description: 'Partner with India\'s student-led youth empowerment platform.',
     images: ['/og-image.jpg'],
   },
 };
@@ -52,15 +52,15 @@ export default function GetInvolvedPage() {
         })}
       />
       <PageHero
-        title="Partner With Us"
-        subtitle="Collaborate with our central organization to create scalable youth programs, host mentorship cohorts, and expand educational reach."
+        title="Collaborate With Us"
+        subtitle="Collaborate with our initiative to create practical youth programs, host mentorship cohorts, and expand educational reach."
       />
 
       <SectionWrapper className="bg-slate-50/70 py-12 md:py-16">
         <SectionHeader 
-          badge="Institutional Alliances"
+          badge="Collaboration & Outreach"
           title="Collaboration Opportunities" 
-          subtitle="Explore how your enterprise, university, or nonprofit organization can partner with our digital ecosystem."
+          subtitle="Explore how your enterprise, university, or community organization can collaborate with our student platform."
           centered 
         />
 
@@ -80,9 +80,9 @@ export default function GetInvolvedPage() {
             },
             {
               icon: Users2,
-              title: 'Community Foundations & NGOs',
-              desc: 'Join our grassroots welfare programs to bring technical skills, sports programs, and mentorship to underserved communities.',
-              cta: 'Partner as a Community NGO',
+              title: 'Community Groups & Foundations',
+              desc: 'Join our grassroots community programs to bring technical skills, sports programs, and mentorship to underserved youth.',
+              cta: 'Collaborate as a Community Group',
             },
             {
               icon: ShieldCheck,
@@ -91,6 +91,7 @@ export default function GetInvolvedPage() {
               cta: 'Join as an Industry Mentor',
             },
           ].map((card, idx) => {
+
             const Icon = card.icon;
             return (
               <div

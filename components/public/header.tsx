@@ -124,8 +124,9 @@ export function Header({
             asChild
             className="ml-1 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 border-0 shadow-md text-white font-semibold text-xs xl:text-sm px-3.5 xl:px-4.5 py-1.5 shrink-0 whitespace-nowrap"
           >
-            <Link href="/get-involved">Get Involved</Link>
+            <Link href="/get-involved">Join the Initiative</Link>
           </Button>
+
         </nav>
 
         {/* Mobile Header: ONLY Notification Bell + Hamburger (Donate is inside Hamburger) */}

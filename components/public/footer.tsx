@@ -55,7 +55,7 @@ export function Footer({ settings = {} }: FooterProps) {
   const address = settings.address;
   const footerText = settings.footer_text || siteConfig.description;
   const copyright =
-    settings.copyright_text || `© ${currentYear} ${siteConfig.name}. All rights reserved.`;
+    settings.copyright_text || `© ${currentYear} ${siteConfig.name}. An Independent Student-Led Initiative.`;
   const socials = socialConfig.filter((item) => Boolean(settings[item.key]));
 
   return (
@@ -79,16 +79,14 @@ export function Footer({ settings = {} }: FooterProps) {
                   <span className="text-[#0284C7]">Youth</span>
                   <span className="text-[#F97316]">Empowerment Hub</span>
                 </span>
-                <span className="text-[11px] font-bold text-slate-300 tracking-wider uppercase mt-1 flex items-center gap-1.5">
-                  <span>Learn</span>
-                  <span className="w-1 h-1 rounded-full bg-[#0284C7]" />
-                  <span>Innovate</span>
-                  <span className="w-1 h-1 rounded-full bg-[#F97316]" />
-                  <span>Grow</span>
+                <span className="text-[11px] font-bold text-emerald-400 tracking-wider uppercase mt-1 flex items-center gap-1.5">
+                  <span>An Independent Student-Led Initiative</span>
                 </span>
               </div>
             </Link>
-            <p className="text-sm leading-relaxed text-slate-400 pr-4">{footerText}</p>
+            <p className="text-sm leading-relaxed text-slate-400 pr-4">
+              {footerText || 'An independent student-led initiative focused on youth development, skills, opportunities, participation and community building.'}
+            </p>
           </div>
 
           <div className="space-y-6">
@@ -123,7 +121,7 @@ export function Footer({ settings = {} }: FooterProps) {
               </li>
               <li>
                 <Link href="/about" className="hover:text-blue-400 transition-colors">
-                  About the Organisation
+                  About the Initiative
                 </Link>
               </li>
             </ul>
@@ -144,7 +142,7 @@ export function Footer({ settings = {} }: FooterProps) {
               </li>
               <li>
                 <Link href="/contact?category=Partnership" className="hover:text-blue-400 transition-colors">
-                  Partner with us
+                  Collaborate with us
                 </Link>
               </li>
               <li>
@@ -154,6 +152,7 @@ export function Footer({ settings = {} }: FooterProps) {
               </li>
             </ul>
           </div>
+
 
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-white">Connect</h3>
