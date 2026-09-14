@@ -74,7 +74,7 @@ export function ImpactSection({ metrics = [] }: ImpactSectionProps) {
   };
 
   return (
-    <section className="py-20 sm:py-24 bg-slate-50/70 relative overflow-hidden text-slate-900 border-t border-slate-200/80">
+    <section className="py-20 sm:py-24 bg-[#F8FAFC] relative overflow-hidden text-slate-900 border-b border-slate-200/70">
       <div className="container-custom relative z-10">
         <div className="flex flex-col items-center text-center mb-14 sm:mb-16">
           <div className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-xs font-semibold tracking-wide uppercase mb-4 border border-blue-200 bg-blue-50 text-blue-700 backdrop-blur-md">

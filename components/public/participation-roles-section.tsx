@@ -1,74 +1,96 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, HeartHandshake, Users, MapPin, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { 
+  GraduationCap, 
+  HeartHandshake, 
+  Trophy, 
+  Compass, 
+  ArrowRight, 
+  Sparkles, 
+  ShieldCheck, 
+  CheckCircle2, 
+  ExternalLink,
+  Briefcase
+} from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { PlatformIntroModal } from '@/components/public/platform-intro-modal';
+import type { PlatformCardData } from '@/components/public/platform-card';
 
-const participationRoles = [
+const OPPORTUNITY_TRACKS = [
   {
-    title: 'Campus Ambassador',
-    badge: 'Popular Role',
-    badgeColor: 'bg-blue-50 text-blue-700 border-blue-200',
+    title: 'Campus Ambassador Program',
+    badge: 'Popular Leadership Track',
+    badgeColor: 'bg-blue-50 text-blue-700 border-blue-200/80',
     icon: GraduationCap,
-    description: 'Be the voice of Youth Empowerment Hub in your college or university. Connect peers to learning labs, competitions, and events.',
-    contribution: 'Host campus info sessions, form student discussion groups, and coordinate event participation.',
-    eligibility: 'Currently enrolled college/university student passionate about peer growth.',
-    ctaText: 'Apply as Ambassador',
-    ctaLink: '/contact?category=Volunteering',
-    available: true,
+    description: 'Lead your college or university chapter, organize peer workshops, tech hackathons, and represent YEH on your campus.',
+    highlights: ['Host campus info sessions & student meetups', 'Exclusive leadership kit & verifiable LORs'],
   },
   {
-    title: 'Volunteer',
-    badge: 'Open Application',
-    badgeColor: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+    title: 'Student Volunteering',
+    badge: 'Active Teams',
+    badgeColor: 'bg-cyan-50 text-cyan-700 border-cyan-200/80',
     icon: HeartHandshake,
-    description: 'Support active initiatives behind the scenes across technology, content creation, social media, event management, and outreach.',
-    contribution: 'Contribute 2–4 hours weekly toward event logistics, design, tech support, or community management.',
-    eligibility: 'Any student or recent graduate eager to gain practical collaborative experience.',
-    ctaText: 'Join as Volunteer',
-    ctaLink: '/contact?category=Volunteering',
-    available: true,
+    description: 'Contribute behind the scenes across technology, web development, content creation, social media, and event logistics.',
+    highlights: ['Flexible 2–4 hours weekly commitment', 'Hands-on project experience in agile teams'],
   },
   {
-    title: 'Community Member',
-    badge: 'Instant Access',
-    badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    icon: Users,
-    description: 'Participate actively in workshops, quizzes, sports meets, and skill challenges while building meaningful connections.',
-    contribution: 'Engage in open community sessions, give feedback on activities, and learn with peers.',
-    eligibility: 'Open to all students and youth across India.',
-    ctaText: 'Join Community',
-    ctaLink: '/get-involved',
-    available: true,
+    title: 'Competitions & Hackathons',
+    badge: 'Open Challenges',
+    badgeColor: 'bg-amber-50 text-amber-700 border-amber-200/80',
+    icon: Trophy,
+    description: 'Participate in student innovation challenges, coding hackathons, talent hunts, and youth athletic tournaments.',
+    highlights: ['Showcase your skills & win community awards', 'Peer feedback & mentor guidance'],
   },
   {
-    title: 'District / State Representative',
-    badge: 'Expanding Soon',
-    badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
-    icon: MapPin,
-    description: 'Help coordinate inter-college activities and regional student chapters as the initiative expands into new districts.',
-    contribution: 'Regional outreach, student chapter coordination, and local event management.',
-    eligibility: 'Experienced student leaders or active community contributors.',
-    ctaText: 'Express Interest',
-    ctaLink: '/contact?category=General%20Inquiry',
-    available: false,
+    title: 'Skill Fellowships & Roles',
+    badge: 'Growth Track',
+    badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200/80',
+    icon: Compass,
+    description: 'Access curated student fellowships, research projects, and regional youth representative opportunities across India.',
+    highlights: ['Certificate of completion & experiential learning', '100% free for all students'],
   },
 ];
 
-export function ParticipationRolesSection() {
+interface ParticipationRolesSectionProps {
+  platforms?: PlatformCardData[];
+}
+
+export function ParticipationRolesSection({ platforms = [] }: ParticipationRolesSectionProps) {
+  const [activeModalPlatform, setActiveModalPlatform] = useState<PlatformCardData | null>(null);
+
+  const opportunitiesPlatform =
+    platforms.find(
+      (p) => p.slug === 'opportunities' || p.name.toLowerCase().includes('opportunities')
+    ) || {
+      id: 'opportunities-default',
+      name: 'Opportunities Portal',
+      slug: 'opportunities',
+      category: 'Careers & Opportunities',
+      status: 'live',
+      url: '/platforms',
+      description: 'Our official platform for verified internship listings, campus ambassador applications, and youth career opportunities.',
+    };
+
+  const handleOpenOpportunities = () => {
+    setActiveModalPlatform(opportunitiesPlatform);
+  };
+
   return (
-    <section id="how-to-participate" className="py-20 sm:py-24 bg-white text-slate-900 relative overflow-hidden border-t border-slate-200/80">
-      <div className="container-custom relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
+    <section id="opportunities" className="py-20 sm:py-24 bg-white text-slate-900 relative overflow-hidden border-t border-slate-200/70">
+      <div className="container-custom relative z-10 max-w-6xl">
+        {/* Section Header */}
+        <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-xs font-semibold text-blue-700 backdrop-blur-md mb-4"
+            className="inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/80 px-4 py-1.5 text-xs font-semibold text-blue-700 backdrop-blur-md mb-4 shadow-xs"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-            Participation Pathways
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            Central Opportunities Gateway
           </motion.div>
 
           <motion.h2
@@ -76,9 +98,9 @@ export function ParticipationRolesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-950 mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-950 mb-5"
           >
-            There&apos;s More Than One Way to Contribute
+            Explore & Grab Opportunities
           </motion.h2>
 
           <motion.p
@@ -88,76 +110,104 @@ export function ParticipationRolesSection() {
             transition={{ delay: 0.2 }}
             className="text-slate-600 text-sm sm:text-base md:text-lg leading-relaxed font-normal"
           >
-            Whether you want to lead on your campus, support events with your technical or creative skills, or simply participate and learn — there is a place for you in our student community.
+            Looking to join as a <strong>Campus Ambassador</strong>, volunteer behind the scenes, or participate in student challenges? We have already centralized all open student roles, leadership tracks, and applications directly on our <strong>Opportunities Portal</strong>.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {participationRoles.map((role, idx) => {
-            const Icon = role.icon;
-            return (
-              <motion.div
-                key={role.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1, duration: 0.5 }}
-                className="rounded-3xl bg-slate-50/70 border border-slate-200/90 p-6 sm:p-8 hover:border-blue-300 hover:bg-white hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${role.badgeColor}`}>
-                      {role.badge}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-slate-900 mb-2 tracking-tight">
-                    {role.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal mb-5">
-                    {role.description}
-                  </p>
-
-                  <div className="space-y-2.5 pt-4 border-t border-slate-200/60 text-xs">
-                    <div className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span className="text-slate-700">
-                        <strong className="text-slate-900 font-semibold">Expected Role:</strong> {role.contribution}
+        {/* Central Soothing Callout Card */}
+        <div className="rounded-3xl bg-gradient-to-br from-slate-50/90 via-blue-50/30 to-indigo-50/20 border border-slate-200/80 p-6 sm:p-10 md:p-12 shadow-sm relative overflow-hidden mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+            {OPPORTUNITY_TRACKS.map((track, idx) => {
+              const Icon = track.icon;
+              return (
+                <motion.div
+                  key={track.title}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.08, duration: 0.4 }}
+                  className="rounded-2xl bg-white border border-slate-200/70 p-5 sm:p-6 shadow-xs hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/70 text-blue-600 flex items-center justify-center">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${track.badgeColor}`}>
+                        {track.badge}
                       </span>
                     </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                      <span className="text-slate-700">
-                        <strong className="text-slate-900 font-semibold">Eligibility:</strong> {role.eligibility}
-                      </span>
-                    </div>
+
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-1.5">
+                      {track.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                      {track.description}
+                    </p>
                   </div>
-                </div>
 
-                <div className="mt-6 pt-5 border-t border-slate-200/60">
-                  <Button
-                    asChild
-                    className="w-full h-11 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs sm:text-sm transition-all shadow-sm hover:shadow-md"
-                  >
-                    <Link href={role.ctaLink} className="flex items-center justify-center gap-2">
-                      <span>{role.ctaText}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+                  <div className="space-y-1.5 pt-3 border-t border-slate-100 text-xs text-slate-600">
+                    {track.highlights.map((h) => (
+                      <div key={h} className="flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>{h}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
 
-        {/* Responsible Transparency Callout */}
-        <div className="mt-12 text-center max-w-2xl mx-auto p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed">
-          <span className="font-semibold text-slate-900">Participation Notice:</span> All roles are volunteer and student participation opportunities created for experiential learning and community service. YEH does not offer salaried employment or make commercial placement guarantees.
+          {/* Action Row */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
+            <Button
+              onClick={handleOpenOpportunities}
+              size="lg"
+              className="w-full sm:w-auto h-12 sm:h-13 px-8 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-500/20 border-0 cursor-pointer"
+            >
+              <Briefcase className="w-4 h-4 mr-2" />
+              <span>Explore Opportunities Portal</span>
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="w-full sm:w-auto h-12 sm:h-13 px-6 rounded-2xl border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-sm sm:text-base shadow-xs"
+            >
+              <Link href="/platforms" className="flex items-center justify-center gap-2">
+                <span>View All Ecosystem Platforms</span>
+                <ExternalLink className="w-4 h-4" />
+              </Link>
+            </Button>
+          </div>
+
+          {/* Trust Footnote */}
+          <div className="mt-8 pt-6 border-t border-slate-200/60 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs text-slate-500 font-medium">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+              100% Free & Open to All Students
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+              Direct Application Tracking
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+              Verified Experiential Learning
+            </span>
+          </div>
         </div>
       </div>
+
+      {/* Interactive Platform Preview Modal */}
+      <PlatformIntroModal
+        platform={activeModalPlatform}
+        isOpen={Boolean(activeModalPlatform)}
+        onClose={() => setActiveModalPlatform(null)}
+      />
     </section>
   );
 }

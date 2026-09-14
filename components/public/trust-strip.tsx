@@ -38,7 +38,7 @@ const trustItems = [
 
 export function TrustStrip() {
   return (
-    <section className="relative z-20 py-8 sm:py-10 px-4 w-full bg-slate-50/70 border-b border-slate-200/80">
+    <section className="relative z-20 py-8 sm:py-10 px-4 w-full bg-[#F8FAFC] border-b border-slate-200/70">
       <div className="container-custom max-w-6xl">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           {trustItems.map((item, index) => {

@@ -41,7 +41,7 @@ const approachCards = [
 
 export function WhatIsYehSection() {
   return (
-    <section id="about-initiative" className="py-20 sm:py-24 bg-white text-slate-900 relative overflow-hidden">
+    <section id="about-initiative" className="py-20 sm:py-24 bg-white text-slate-900 relative overflow-hidden border-b border-slate-200/70">
       <div className="container-custom relative z-10">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">

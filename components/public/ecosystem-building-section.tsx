@@ -63,7 +63,7 @@ export function EcosystemBuildingSection({ platforms = [] }: EcosystemBuildingPr
   const [activePlatformModal, setActivePlatformModal] = useState<PlatformCardData | null>(null);
 
   return (
-    <section id="what-we-build" className="py-20 sm:py-24 bg-white text-slate-900 relative overflow-hidden border-t border-slate-200/80">
+    <section id="what-we-build" className="py-20 sm:py-24 bg-white text-slate-900 relative overflow-hidden border-b border-slate-200/70">
       <div className="container-custom relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
           <motion.div

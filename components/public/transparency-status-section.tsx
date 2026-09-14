@@ -35,7 +35,7 @@ const statusBreakdown = [
 
 export function TransparencyStatusSection() {
   return (
-    <section id="transparency" className="py-20 sm:py-24 bg-slate-50/70 text-slate-900 relative overflow-hidden border-t border-slate-200/80">
+    <section id="transparency" className="py-20 sm:py-24 bg-[#F8FAFC] text-slate-900 relative overflow-hidden border-b border-slate-200/70">
       <div className="container-custom relative z-10 max-w-5xl">
         <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
           <motion.div

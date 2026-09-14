@@ -62,7 +62,7 @@ export function Hero({ heroConfig, platforms = [] }: HeroProps) {
     };
 
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-slate-50/80 via-white to-white py-16 md:py-24 w-full border-b border-slate-100">
+    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#F1F5F9]/50 via-[#F8FAFC] to-[#F8FAFC] py-16 md:py-24 w-full border-b border-slate-200/70">
       {/* Background Ambience */}
       <div className="absolute inset-0 dot-pattern opacity-40 pointer-events-none" />
 

@@ -6,7 +6,6 @@ import { EcosystemBuildingSection } from '@/components/public/ecosystem-building
 import { EventsSection } from '@/components/public/events-section';
 import { ImpactSection } from '@/components/public/impact-section';
 import { ParticipationRolesSection } from '@/components/public/participation-roles-section';
-import { AmbassadorSpotlightSection } from '@/components/public/ambassador-spotlight-section';
 import { TransparencyStatusSection } from '@/components/public/transparency-status-section';
 import { FutureRoadmapSection } from '@/components/public/future-roadmap-section';
 import { AccountabilitySection } from '@/components/public/accountability-section';
@@ -80,15 +79,12 @@ export default async function HomePage() {
         <ImpactSection metrics={dbMetrics} />
       ) : null}
 
-      {/* 8. How Students Can Participate */}
+      {/* 8. Explore & Grab Opportunities Gateway */}
       {isVisible('get_involved') && flags.get_involved_enabled !== false ? (
-        <ParticipationRolesSection />
+        <ParticipationRolesSection platforms={dbPlatforms} />
       ) : null}
 
-      {/* 9. Campus Ambassador Spotlight Callout */}
-      <AmbassadorSpotlightSection />
-
-      {/* 10. Dedicated Transparency Commitment & Current Stage */}
+      {/* 9. Dedicated Transparency Commitment & Current Stage */}
       <TransparencyStatusSection />
 
       {/* 11. Progressive Future Vision Roadmap */}
