@@ -7,18 +7,17 @@ import { Button } from '@/components/ui/button';
 
 export function FinalJoinCta() {
   return (
-    <section className="py-20 sm:py-28 bg-[#0A0F1C] text-white relative overflow-hidden border-t border-white/5">
-      {/* Dynamic Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-r from-blue-600/15 via-cyan-500/10 to-violet-600/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
-
+    <section className="py-20 sm:py-24 bg-white relative overflow-hidden border-t border-slate-200/80">
       <div className="container-custom relative z-10 max-w-4xl">
-        <div className="rounded-3xl bg-gradient-to-br from-white/[0.05] via-white/[0.03] to-white/[0.01] border border-white/15 p-8 sm:p-14 md:p-16 backdrop-blur-2xl text-center shadow-2xl relative overflow-hidden">
+        <div className="rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-[#0F172A] border border-slate-800 p-8 sm:p-14 md:p-16 text-center text-white shadow-2xl relative overflow-hidden">
+          {/* Subtle Ambience */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-1.5 text-xs font-semibold text-cyan-300 backdrop-blur-md mb-6"
+            className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-500/15 px-4 py-1.5 text-xs font-semibold text-cyan-300 backdrop-blur-md mb-6"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Join The Movement
@@ -66,10 +65,10 @@ export function FinalJoinCta() {
               asChild
               variant="outline"
               size="lg"
-              className="w-full sm:w-auto h-12 sm:h-13 px-7 rounded-2xl border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold text-sm sm:text-base backdrop-blur-md"
+              className="w-full sm:w-auto h-12 sm:h-13 px-7 rounded-2xl border-white/20 bg-white/10 hover:bg-white/15 text-white font-semibold text-sm sm:text-base backdrop-blur-md"
             >
               <Link href="/platforms" className="flex items-center justify-center gap-2">
-                <Compass className="w-4 h-4" />
+                <Compass className="w-4 h-4 text-cyan-400" />
                 <span>Explore Opportunities</span>
               </Link>
             </Button>

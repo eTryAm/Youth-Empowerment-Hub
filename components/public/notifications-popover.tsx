@@ -84,10 +84,11 @@ export function NotificationsPopover({ notifications = [] }: NotificationsPopove
     <DropdownMenu open={open} onOpenChange={handleOpenChange}>
       <DropdownMenuTrigger asChild>
         <button
-          className="relative p-2 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-all focus:outline-none cursor-pointer flex items-center justify-center"
+          className="relative p-2 rounded-full text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-all focus:outline-none cursor-pointer flex items-center justify-center"
           aria-label={`View notifications ${showBadge ? `(${count} new)` : ''}`}
         >
           <Bell className="w-5 h-5 transition-transform hover:rotate-12" />
+
           {showBadge && (
             <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center pointer-events-none">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>

@@ -32,7 +32,8 @@ export function MobileNav({ navItems, siteName }: MobileNavProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-white/10 hover:text-white h-9 w-9 p-0"
+            className="text-slate-700 hover:bg-slate-100 hover:text-slate-900 h-9 w-9 p-0"
+
             aria-label="Open menu"
           >
             <Menu className="h-5 w-5 sm:h-6 sm:w-6" />

@@ -69,24 +69,20 @@ export function DonationCta({ donationEnabled, donationUrl }: DonationCtaProps) 
   };
 
   return (
-    <section className="py-16 sm:py-20 md:py-28 relative overflow-hidden bg-gradient-to-b from-[#0A0F1C] via-[#0D1527] to-[#0A0F1C] text-white">
-      {/* Background Decorative Lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-gradient-to-r from-orange-600/15 via-rose-600/15 to-blue-600/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
-
+    <section className="py-16 sm:py-20 md:py-28 relative overflow-hidden bg-slate-50/70 border-t border-slate-200/80 text-slate-900">
       <div className="container px-4 md:px-6 mx-auto relative z-10 max-w-6xl">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-10 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-orange-500/15 to-rose-500/15 border border-orange-400/30 text-orange-400 text-xs font-black uppercase tracking-wider shadow-sm">
-            <Heart className="w-3.5 h-3.5 fill-orange-400 text-orange-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold uppercase tracking-wider shadow-sm">
+            <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500 animate-pulse" />
             Invest in Young Innovators • Spark Real Change
           </div>
 
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-950 leading-tight">
             One Opportunity Can Change a Generation.
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed font-normal">
+          <p className="text-slate-600 text-sm sm:text-base md:text-lg leading-relaxed font-normal">
             Talent is everywhere, but opportunities are not. Your contribution directly funds youth hackathons, robotics innovation kits, coding bootcamps, and career fellowships for ambitious students from underserved backgrounds.
           </p>
         </div>
@@ -104,12 +100,12 @@ export function DonationCta({ donationEnabled, donationUrl }: DonationCtaProps) 
                 onClick={() => setSelectedTier(idx)}
                 className={`relative rounded-3xl p-5 sm:p-6 transition-all duration-300 cursor-pointer flex flex-col justify-between border ${
                   isSelected
-                    ? 'bg-white/[0.08] border-orange-400/80 shadow-2xl shadow-orange-500/15 ring-2 ring-orange-400/30'
-                    : 'bg-white/[0.03] border-white/10 hover:border-white/20 hover:bg-white/[0.05]'
+                    ? 'bg-white border-blue-500 shadow-xl shadow-blue-500/10 ring-2 ring-blue-500/20'
+                    : 'bg-white border-slate-200/80 hover:border-slate-300 hover:shadow-md'
                 }`}
               >
                 {tier.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 text-[10px] font-black uppercase tracking-wider text-white shadow-md">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-[10px] font-bold uppercase tracking-wider text-white shadow-md">
                     Most Chosen Impact
                   </span>
                 )}
@@ -120,20 +116,20 @@ export function DonationCta({ donationEnabled, donationUrl }: DonationCtaProps) 
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                     <div className="text-right">
-                      <span className="text-xl sm:text-2xl md:text-3xl font-black text-white">{tier.amount}</span>
+                      <span className="text-xl sm:text-2xl md:text-3xl font-black text-slate-950">{tier.amount}</span>
                     </div>
                   </div>
 
-                  <h3 className="text-base sm:text-lg font-bold text-white mb-1.5">{tier.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">{tier.description}</p>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-1.5">{tier.title}</h3>
+                  <p className="text-xs text-slate-500 leading-relaxed">{tier.description}</p>
                 </div>
 
-                <div className="pt-4 mt-3 border-t border-white/5 flex items-center justify-between text-xs">
-                  <span className={`font-bold ${isSelected ? 'text-orange-400' : 'text-slate-500'}`}>
+                <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <span className={`font-bold ${isSelected ? 'text-blue-600' : 'text-slate-400'}`}>
                     {isSelected ? '✓ Selected' : 'Tap to Select'}
                   </span>
                   <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-                    isSelected ? 'border-orange-400 bg-orange-500 text-white' : 'border-white/20'
+                    isSelected ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300'
                   }`}>
                     {isSelected && <span className="w-2 h-2 rounded-full bg-white" />}
                   </div>
@@ -143,8 +139,8 @@ export function DonationCta({ donationEnabled, donationUrl }: DonationCtaProps) 
           })}
         </div>
 
-        {/* Central Moving / Pulsing Donation Action Card */}
-        <div className="rounded-3xl bg-gradient-to-r from-blue-900/40 via-indigo-900/40 to-orange-950/40 border border-white/15 p-6 sm:p-10 md:p-12 text-center shadow-2xl relative overflow-hidden backdrop-blur-xl">
+        {/* Central Action Card */}
+        <div className="rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-[#0F172A] border border-slate-800 p-6 sm:p-10 md:p-12 text-center shadow-2xl relative overflow-hidden">
           <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
           <div className="absolute -left-20 -top-20 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
 

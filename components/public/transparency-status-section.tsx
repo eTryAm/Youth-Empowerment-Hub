@@ -9,7 +9,7 @@ const statusBreakdown = [
     title: 'Independent Student-Led Initiative',
     description: 'Operating as a self-organized, student-driven platform focused on practical youth development, activities, and skills.',
     badge: 'Active & Operational',
-    badgeColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     icon: Flag,
     current: true,
   },
@@ -18,7 +18,7 @@ const statusBreakdown = [
     title: 'Skills, Opportunities & Community',
     description: 'Curating student learning tracks, workshops, quizzes, tournaments, and meaningful collaboration across campuses.',
     badge: 'Ongoing Mission',
-    badgeColor: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
+    badgeColor: 'bg-blue-50 text-blue-700 border-blue-200',
     icon: Target,
     current: false,
   },
@@ -27,7 +27,7 @@ const statusBreakdown = [
     title: 'Formal Organizational Structure',
     description: 'Formal registration will be pursued as activities expand and institutional scale demands, following our progressive roadmap.',
     badge: 'Future Roadmap',
-    badgeColor: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+    badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
     icon: Compass,
     current: false,
   },
@@ -35,18 +35,16 @@ const statusBreakdown = [
 
 export function TransparencyStatusSection() {
   return (
-    <section id="transparency" className="py-20 sm:py-28 bg-[#070B14] text-white relative overflow-hidden border-t border-white/5">
-      <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
-
+    <section id="transparency" className="py-20 sm:py-24 bg-slate-50/70 text-slate-900 relative overflow-hidden border-t border-slate-200/80">
       <div className="container-custom relative z-10 max-w-5xl">
         <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold text-emerald-300 backdrop-blur-md mb-4"
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-800 backdrop-blur-md mb-4"
           >
-            <ShieldCheck className="w-3.5 h-3.5" />
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
             Our Transparency Commitment
           </motion.div>
 
@@ -55,7 +53,7 @@ export function TransparencyStatusSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-950 mb-6"
           >
             Where We Are Today
           </motion.h2>
@@ -65,12 +63,12 @@ export function TransparencyStatusSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="space-y-4 text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed font-normal"
+            className="space-y-4 text-slate-600 text-sm sm:text-base md:text-lg leading-relaxed font-normal"
           >
             <p>
-              Youth Empowerment Hub is currently an <strong className="text-white font-semibold">independent student-led initiative</strong>. We are building our activities, community, and platform progressively through student participation and collaboration.
+              Youth Empowerment Hub is currently an <strong className="text-slate-900 font-semibold">independent student-led initiative</strong>. We are building our activities, community, and platform progressively through student participation and collaboration.
             </p>
-            <p className="text-slate-400 text-xs sm:text-sm md:text-base">
+            <p className="text-slate-500 text-xs sm:text-sm md:text-base">
               Transparency matters to us. We believe students and collaborators should know who they are engaging with and exactly what stage the initiative is currently in.
             </p>
           </motion.div>
@@ -89,8 +87,8 @@ export function TransparencyStatusSection() {
                 transition={{ delay: idx * 0.1, duration: 0.4 }}
                 className={`rounded-3xl p-6 sm:p-7 transition-all duration-300 relative flex flex-col justify-between ${
                   item.current
-                    ? 'bg-gradient-to-b from-blue-950/40 via-white/[0.04] to-white/[0.02] border-2 border-blue-500/40 shadow-xl shadow-blue-500/10'
-                    : 'bg-white/[0.02] border border-white/10 hover:border-white/20'
+                    ? 'bg-white border-2 border-blue-500 shadow-xl shadow-blue-500/10'
+                    : 'bg-white border border-slate-200 shadow-xs hover:border-slate-300'
                 }`}
               >
                 <div>
@@ -104,22 +102,22 @@ export function TransparencyStatusSection() {
                   </div>
 
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="text-lg font-bold text-white tracking-tight leading-tight">
+                    <h3 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                       {item.title}
                     </h3>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mt-3">
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal mt-3">
                     {item.description}
                   </p>
                 </div>
 
                 {item.current && (
-                  <div className="mt-6 pt-4 border-t border-blue-500/20 flex items-center gap-2 text-xs font-bold text-emerald-400">
-                    <Check className="w-4 h-4" />
+                  <div className="mt-6 pt-4 border-t border-blue-100 flex items-center gap-2 text-xs font-bold text-emerald-700">
+                    <Check className="w-4 h-4 text-emerald-600" />
                     <span>Operating today with full transparency</span>
                   </div>
                 )}
@@ -129,9 +127,9 @@ export function TransparencyStatusSection() {
         </div>
 
         {/* Clear Legal Status Note */}
-        <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-5 sm:p-6 text-center">
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto">
-            <strong className="text-white">Future Legal Structure:</strong> Formal organizational registration is part of our future roadmap and will be pursued when appropriate as the initiative develops in scale, activities, and operational scope.
+        <div className="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 text-center shadow-xs">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            <strong className="text-slate-900">Future Legal Structure:</strong> Formal organizational registration is part of our future roadmap and will be pursued when appropriate as the initiative develops in scale, activities, and operational scope.
           </p>
         </div>
       </div>

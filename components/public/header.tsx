@@ -39,15 +39,15 @@ export function Header({
       className={cn(
         'sticky top-0 z-50 flex items-center transition-all duration-300 w-full',
         scrolled
-          ? 'h-16 bg-[#0A0F1C]/95 shadow-lg backdrop-blur-xl border-b border-white/10'
-          : 'h-16 sm:h-18 md:h-20 bg-[#0A0F1C]/90 backdrop-blur-md border-b border-white/5'
+          ? 'h-16 bg-white/95 shadow-md backdrop-blur-xl border-b border-slate-200/80'
+          : 'h-16 sm:h-18 md:h-20 bg-white/90 backdrop-blur-md border-b border-slate-200/60'
       )}
     >
       <div className="container-custom flex w-full items-center justify-between gap-3 sm:gap-4">
         {/* Brand Link — Logo & Organisation Name in ONE Line Always */}
         <Link href="/" className="flex items-center gap-2.5 sm:gap-3 shrink-0 z-50 group py-1" aria-label={`${siteName} home`}>
           {/* Logo Badge */}
-          <div className="relative w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl sm:rounded-2xl overflow-hidden bg-white p-0.5 sm:p-1 shadow-md ring-1 ring-white/20 shrink-0 group-hover:scale-105 transition-all">
+          <div className="relative w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl sm:rounded-2xl overflow-hidden bg-white p-0.5 sm:p-1 shadow-sm ring-1 ring-slate-200 shrink-0 group-hover:scale-105 transition-all">
             <Image
               src="/images/logo.png"
               alt="Youth Empowerment Hub Logo"
@@ -60,10 +60,10 @@ export function Header({
           {/* Organisation Name in ONE LINE */}
           <div className="flex flex-col justify-center shrink-0">
             <span className="text-base sm:text-lg md:text-xl font-black tracking-tight leading-tight whitespace-nowrap flex items-center gap-1.5">
-              <span className="text-[#0284C7] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">Youth</span>
-              <span className="text-[#F97316] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">Empowerment Hub</span>
+              <span className="text-[#0284C7]">Youth</span>
+              <span className="text-[#F97316]">Empowerment Hub</span>
             </span>
-            <span className="text-[10px] sm:text-[11px] font-bold text-slate-300 tracking-wider uppercase mt-0.5 whitespace-nowrap hidden sm:flex items-center gap-1.5">
+            <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 tracking-wider uppercase mt-0.5 whitespace-nowrap hidden sm:flex items-center gap-1.5">
               <span>Learn</span>
               <span className="w-1 h-1 rounded-full bg-[#0284C7]" />
               <span>Innovate</span>
@@ -82,17 +82,18 @@ export function Header({
                 key={item.url}
                 href={item.url}
                 className={cn(
-                  'text-xs xl:text-sm font-semibold transition-colors relative py-1.5 px-2 xl:px-2.5 rounded-lg whitespace-nowrap',
-                  isActive ? 'text-white font-bold bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5'
+                  'text-xs xl:text-sm font-semibold transition-colors relative py-1.5 px-2.5 xl:px-3 rounded-xl whitespace-nowrap',
+                  isActive ? 'text-blue-600 font-bold bg-blue-50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                 )}
               >
                 {item.label}
                 {isActive && (
-                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full" />
+                  <span className="absolute bottom-0 left-2.5 right-2.5 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full" />
                 )}
               </Link>
             );
           })}
+
           
           <NotificationsPopover notifications={notifications} />
 
