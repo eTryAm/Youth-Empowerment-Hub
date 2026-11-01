@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import Script from 'next/script';
 import { Toaster } from 'sonner';
 import { getSiteUrl } from '@/lib/site-url';
 import './globals.css';
@@ -123,6 +124,9 @@ export const metadata: Metadata = {
     // google: 'your-google-verification-code',
     // yandex: 'your-yandex-code',
   },
+  other: {
+    'google-adsense-account': 'ca-pub-8479038746831074',
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
@@ -132,6 +136,13 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
       <body className="min-h-screen flex flex-col bg-background text-foreground">
+        {/* Google AdSense — loads once globally */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8479038746831074"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         {children}
         <Toaster
           position="top-right"
