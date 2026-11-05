@@ -43,7 +43,7 @@ export default function PrivacyPage() {
           </ul>
 
           <p className="mt-8 text-sm text-slate-500">
-            For immediate privacy concerns, please contact us at privacy@youthempowermenthub.org
+            For immediate privacy concerns, please contact us at careers@youthempowerment.in
           </p>
         </div>
       </SectionWrapper>
