@@ -43,7 +43,7 @@ export default function TermsPage() {
           </p>
 
           <p className="mt-8 text-sm text-slate-500">
-            For questions about these terms, please contact us at legal@youthempowermenthub.org
+            For questions about these terms, please contact us at careers@youthempowerment.in
           </p>
         </div>
       </SectionWrapper>
