@@ -58,7 +58,7 @@ export async function getAdminArticleCategories() {
 }
 
 export async function createArticleCategory(data: unknown) {
-  const user = await requirePermission('articles.edit');
+  const user = await requirePermission('articles.create');
   const parsed = categorySchema.safeParse(data);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid data' };
@@ -171,13 +171,16 @@ export async function getAdminArticleById(id: string) {
 }
 
 export async function createArticle(data: unknown) {
-  const user = await requirePermission('articles.edit');
+  const user = await requirePermission('articles.create');
   const parsed = articleSchema.safeParse(data);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid data' };
   }
   try {
     const isPublished = parsed.data.status === 'published';
+    if (isPublished) {
+      await requirePermission('articles.publish');
+    }
     const [created] = await db
       .insert(articles)
       .values({
@@ -219,6 +222,10 @@ export async function updateArticle(id: string, data: unknown) {
     .where(eq(articles.id, id))
     .limit(1);
   if (!current) return { success: false, error: 'Article not found.' };
+
+  if (parsed.data.status && parsed.data.status !== current.status) {
+    await requirePermission('articles.publish');
+  }
 
   const isBeingPublished = parsed.data.status === 'published' && current.status !== 'published';
   const publishedAt = isBeingPublished ? new Date() : current.publishedAt;
@@ -280,9 +287,11 @@ export async function deleteArticle(id: string) {
 }
 
 export async function publishArticle(id: string) {
+  await requirePermission('articles.publish');
   return updateArticle(id, { status: 'published' });
 }
 
 export async function unpublishArticle(id: string) {
+  await requirePermission('articles.publish');
   return updateArticle(id, { status: 'draft' });
 }

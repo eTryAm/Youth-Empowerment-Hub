@@ -13,6 +13,7 @@ import {
   getRelatedArticles,
 } from '@/lib/public/queries';
 import { getSiteUrl } from '@/lib/site-url';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -26,14 +27,16 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   const baseUrl = getSiteUrl();
   const title = article.seoTitle || article.title;
   const description =
-    article.seoDescription || article.excerpt || `Read "${article.title}" on the YEH Learning Hub.`;
+    article.seoDescription ||
+    article.excerpt ||
+    `Read "${article.title}" on Knowledge & Updates — Youth Empowerment Hub.`;
 
   return {
-    title: `${title} — YEH Learning Hub`,
+    title: `${title} — Knowledge & Updates — YEH`,
     description,
     alternates: { canonical: `/learn/${slug}` },
     openGraph: {
-      title: `${title} — YEH Learning Hub`,
+      title: `${title} — Knowledge & Updates — YEH`,
       description,
       url: `/learn/${slug}`,
       type: 'article',
@@ -46,7 +49,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} — YEH Learning Hub`,
+      title: `${title} — Knowledge & Updates — YEH`,
       description,
       images: [article.featuredImageUrl || '/og-image.jpg'],
     },
@@ -60,6 +63,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   const relatedArticles = await getRelatedArticles(article.id, article.categoryId ?? null, 3);
   const baseUrl = getSiteUrl();
+
+  // Sanitize HTML server-side before rendering.
+  // sanitizeArticleHtml strips scripts, event handlers and unsafe URL schemes
+  // while preserving headings, paragraphs, links, code blocks and tables.
+  const safeContent = sanitizeArticleHtml(article.content);
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -85,7 +93,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   const breadcrumb = breadcrumbSchema([
     { name: 'Home', url: baseUrl },
-    { name: 'Learning Hub', url: `${baseUrl}/learn` },
+    { name: 'Knowledge & Updates', url: `${baseUrl}/learn` },
     ...(article.categoryName && article.categorySlug
       ? [{ name: article.categoryName, url: `${baseUrl}/learn/category/${article.categorySlug}` }]
       : []),
@@ -103,7 +111,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-400 mb-6 flex-wrap">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3 h-3" />
-            <Link href="/learn" className="hover:text-white transition-colors">Learning Hub</Link>
+            <Link href="/learn" className="hover:text-white transition-colors">Knowledge &amp; Updates</Link>
             {article.categoryName && article.categorySlug && (
               <>
                 <ChevronRight className="w-3 h-3" />
@@ -160,7 +168,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       {/* Featured Image */}
       {article.featuredImageUrl && (
-        <div className="relative w-full max-w-4xl mx-auto -mt-0 overflow-hidden aspect-video bg-slate-100">
+        <div className="relative w-full max-w-4xl mx-auto overflow-hidden aspect-video bg-slate-100">
           <Image
             src={article.featuredImageUrl}
             alt={article.featuredImageAlt ?? article.title}
@@ -174,7 +182,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       {/* Article Content */}
       <SectionWrapper className="max-w-4xl mx-auto w-full">
-        {article.content ? (
+        {safeContent ? (
           <div
             className="prose prose-slate prose-lg max-w-none
               prose-headings:font-bold prose-headings:tracking-tight
@@ -187,7 +195,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
               prose-ul:text-slate-700 prose-ol:text-slate-700
               prose-img:rounded-2xl prose-img:shadow-md"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            dangerouslySetInnerHTML={{ __html: safeContent }}
           />
         ) : (
           <div className="text-center py-16 text-slate-400">
@@ -196,13 +204,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         )}
 
-        {/* Back to hub */}
+        {/* Back to Knowledge & Updates */}
         <div className="mt-12 pt-8 border-t border-slate-100">
           <Link
             href="/learn"
             className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700 transition-colors"
           >
-            ← Back to Learning Hub
+            ← Back to Knowledge &amp; Updates
           </Link>
         </div>
       </SectionWrapper>
