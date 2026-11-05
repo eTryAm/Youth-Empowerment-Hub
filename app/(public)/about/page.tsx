@@ -11,13 +11,14 @@ import { webPageSchema } from '@/components/seo/schema';
 export const metadata: Metadata = {
   title: 'About Us — Mission, Vision & Values',
   description:
-    'Learn about Youth Empowerment Hub — India\'s youth development organization dedicated to empowering young people through education, skill development, technology, entrepreneurship, sports, and community initiatives. Discover our mission, vision, and core objectives.',
+    'Learn about Youth Empowerment Hub — an independent, student-led initiative dedicated to empowering young people through education, skill development, technology, entrepreneurship, and community participation. Discover our mission, vision, and core objectives.',
   keywords: [
     'about youth empowerment hub',
     'YEH mission vision',
-    'youth organization India',
-    'youth development mission',
+    'student-led initiative India',
+    'youth development initiative',
     'youth empowerment objectives',
+    'independent youth initiative India',
   ],
   alternates: { canonical: '/about' },
   openGraph: {
@@ -44,7 +45,7 @@ export default async function AboutPage() {
         data={webPageSchema({
           name: 'About Us — Mission, Vision & Values',
           description:
-            'Learn about Youth Empowerment Hub — India\'s youth development organization dedicated to empowering young people.',
+            'Learn about Youth Empowerment Hub — an independent, student-led initiative dedicated to empowering young people.',
           url: 'https://youthempowerment.in/about',
           breadcrumb: [
             { name: 'Home', url: 'https://youthempowerment.in' },
@@ -61,10 +62,15 @@ export default async function AboutPage() {
         <SectionHeader title="Who We Are" subtitle="Our Identity" centered={false} />
         <div className="text-lg text-slate-700 leading-relaxed max-w-4xl">
           <p>
-            The Youth Empowerment Hub is a comprehensive ecosystem designed to aggregate opportunities,
-            foster collaboration, and provide essential resources for young people. We bridge the gap
-            between ambition and achievement by connecting youth with platforms, initiatives, and
-            communities that can catalyze their personal and professional growth.
+            Youth Empowerment Hub (YEH) is an <strong>independent, student-led initiative</strong> focused on
+            contributing to the welfare, development, confidence, skills, opportunities, and participation of young
+            people across India. We are not a registered NGO, trust, or company — we are a grassroots effort built by
+            students, for students and young people.
+          </p>
+          <p className="mt-4">
+            Our ecosystem aggregates opportunities, fosters collaboration, and provides essential resources for youth —
+            bridging the gap between ambition and achievement by connecting young people with platforms, initiatives, and
+            communities that can support their personal and professional growth.
           </p>
         </div>
       </SectionWrapper>

@@ -13,9 +13,10 @@ import { DonationModal } from '@/components/public/donation-modal';
 interface MobileNavProps {
   navItems: { label: string; url: string }[];
   siteName: string;
+  donationEnabled?: boolean;
 }
 
-export function MobileNav({ navItems, siteName }: MobileNavProps) {
+export function MobileNav({ navItems, siteName, donationEnabled = false }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const [isDonationOpen, setIsDonationOpen] = useState(false);
   const pathname = usePathname();
@@ -33,7 +34,6 @@ export function MobileNav({ navItems, siteName }: MobileNavProps) {
             variant="ghost"
             size="icon"
             className="text-slate-700 hover:bg-slate-100 hover:text-slate-900 h-9 w-9 p-0"
-
             aria-label="Open menu"
           >
             <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -83,15 +83,17 @@ export function MobileNav({ navItems, siteName }: MobileNavProps) {
           </nav>
 
           <div className="pt-4 pb-6 border-t border-slate-100 flex flex-col gap-2.5">
-            {/* Donate Button inside Hamburger Menu */}
-            <button
-              type="button"
-              onClick={handleOpenDonate}
-              className="w-full h-12 rounded-2xl bg-gradient-to-r from-[#F97316] via-[#EA580C] to-[#E11D48] hover:opacity-95 text-white font-extrabold text-sm shadow-md shadow-orange-500/20 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
-            >
-              <span>Donate & Support</span>
-              <span>❤️</span>
-            </button>
+            {/* Donate Button — only shown when donation_enabled flag is true */}
+            {donationEnabled && (
+              <button
+                type="button"
+                onClick={handleOpenDonate}
+                className="w-full h-12 rounded-2xl bg-gradient-to-r from-[#F97316] via-[#EA580C] to-[#E11D48] hover:opacity-95 text-white font-extrabold text-sm shadow-md shadow-orange-500/20 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
+              >
+                <span>Donate &amp; Support</span>
+                <Heart className="w-4 h-4" />
+              </button>
+            )}
 
             <Button
               asChild
@@ -105,11 +107,13 @@ export function MobileNav({ navItems, siteName }: MobileNavProps) {
         </SheetContent>
       </Sheet>
 
-      {/* Donation Modal Triggered from Hamburger Menu */}
-      <DonationModal
-        isOpen={isDonationOpen}
-        onClose={() => setIsDonationOpen(false)}
-      />
+      {/* Donation Modal — only rendered when donation is enabled */}
+      {donationEnabled && (
+        <DonationModal
+          isOpen={isDonationOpen}
+          onClose={() => setIsDonationOpen(false)}
+        />
+      )}
     </>
   );
 }

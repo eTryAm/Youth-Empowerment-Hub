@@ -1,7 +1,9 @@
-import { and, asc, desc, eq, gte, inArray } from 'drizzle-orm';
+import { and, asc, desc, eq, gte, inArray, ne } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import {
   announcements,
+  articleCategories,
+  articles,
   events,
   featureFlags,
   galleryItems,
@@ -267,4 +269,159 @@ export async function getPublicGalleryItems(options?: {
   }
 }
 
+// ── Learning Hub — public queries (only published content exposed) ──────────
+
+export async function getPublicArticleCategories() {
+  try {
+    return await db
+      .select()
+      .from(articleCategories)
+      .where(eq(articleCategories.status, 'published'))
+      .orderBy(asc(articleCategories.displayOrder));
+  } catch (error) {
+    console.error('[getPublicArticleCategories]', error);
+    return [];
+  }
+}
+
+export async function getPublishedArticles(opts?: {
+  limit?: number;
+  categoryId?: string;
+  featuredOnly?: boolean;
+}) {
+  try {
+    const conditions = [eq(articles.status, 'published')];
+    if (opts?.categoryId) conditions.push(eq(articles.categoryId, opts.categoryId));
+    if (opts?.featuredOnly) conditions.push(eq(articles.featured, true));
+
+    const query = db
+      .select({
+        id: articles.id,
+        title: articles.title,
+        slug: articles.slug,
+        excerpt: articles.excerpt,
+        featuredImageUrl: articles.featuredImageUrl,
+        featuredImageAlt: articles.featuredImageAlt,
+        author: articles.author,
+        publishedAt: articles.publishedAt,
+        updatedAt: articles.updatedAt,
+        featured: articles.featured,
+        readingTimeMinutes: articles.readingTimeMinutes,
+        categoryId: articles.categoryId,
+        categoryName: articleCategories.name,
+        categorySlug: articleCategories.slug,
+      })
+      .from(articles)
+      .leftJoin(articleCategories, eq(articles.categoryId, articleCategories.id))
+      .where(and(...conditions))
+      .orderBy(desc(articles.publishedAt));
+
+    if (opts?.limit) return await query.limit(opts.limit);
+    return await query;
+  } catch (error) {
+    console.error('[getPublishedArticles]', error);
+    return [];
+  }
+}
+
+export async function getPublishedArticleBySlug(slug: string) {
+  try {
+    const [article] = await db
+      .select({
+        id: articles.id,
+        title: articles.title,
+        slug: articles.slug,
+        excerpt: articles.excerpt,
+        content: articles.content,
+        contentFormat: articles.contentFormat,
+        featuredImageUrl: articles.featuredImageUrl,
+        featuredImageAlt: articles.featuredImageAlt,
+        author: articles.author,
+        seoTitle: articles.seoTitle,
+        seoDescription: articles.seoDescription,
+        publishedAt: articles.publishedAt,
+        updatedAt: articles.updatedAt,
+        readingTimeMinutes: articles.readingTimeMinutes,
+        categoryId: articles.categoryId,
+        categoryName: articleCategories.name,
+        categorySlug: articleCategories.slug,
+      })
+      .from(articles)
+      .leftJoin(articleCategories, eq(articles.categoryId, articleCategories.id))
+      .where(and(eq(articles.slug, slug), eq(articles.status, 'published')))
+      .limit(1);
+    return article ?? null;
+  } catch (error) {
+    console.error('[getPublishedArticleBySlug]', error);
+    return null;
+  }
+}
+
+export async function getRelatedArticles(articleId: string, categoryId: string | null, limit = 3) {
+  try {
+    const conditions = [eq(articles.status, 'published'), ne(articles.id, articleId)];
+    if (categoryId) conditions.push(eq(articles.categoryId, categoryId));
+    return await db
+      .select({
+        id: articles.id,
+        title: articles.title,
+        slug: articles.slug,
+        excerpt: articles.excerpt,
+        featuredImageUrl: articles.featuredImageUrl,
+        author: articles.author,
+        publishedAt: articles.publishedAt,
+        readingTimeMinutes: articles.readingTimeMinutes,
+        categoryName: articleCategories.name,
+        categorySlug: articleCategories.slug,
+      })
+      .from(articles)
+      .leftJoin(articleCategories, eq(articles.categoryId, articleCategories.id))
+      .where(and(...conditions))
+      .orderBy(desc(articles.publishedAt))
+      .limit(limit);
+  } catch (error) {
+    console.error('[getRelatedArticles]', error);
+    return [];
+  }
+}
+
+export async function getPublishedArticlesByCategorySlug(categorySlug: string) {
+  try {
+    return await db
+      .select({
+        id: articles.id,
+        title: articles.title,
+        slug: articles.slug,
+        excerpt: articles.excerpt,
+        featuredImageUrl: articles.featuredImageUrl,
+        author: articles.author,
+        publishedAt: articles.publishedAt,
+        readingTimeMinutes: articles.readingTimeMinutes,
+        featured: articles.featured,
+        categoryName: articleCategories.name,
+        categorySlug: articleCategories.slug,
+      })
+      .from(articles)
+      .leftJoin(articleCategories, eq(articles.categoryId, articleCategories.id))
+      .where(and(eq(articles.status, 'published'), eq(articleCategories.slug, categorySlug)))
+      .orderBy(desc(articles.publishedAt));
+  } catch (error) {
+    console.error('[getPublishedArticlesByCategorySlug]', error);
+    return [];
+  }
+}
+
+// For dynamic sitemap — returns only published slugs
+export async function getAllPublishedArticleSlugs() {
+  try {
+    return await db
+      .select({ slug: articles.slug, updatedAt: articles.updatedAt })
+      .from(articles)
+      .where(eq(articles.status, 'published'))
+      .orderBy(desc(articles.publishedAt));
+  } catch (error) {
+    console.error('[getAllPublishedArticleSlugs]', error);
+    return [];
+  }
+}
 

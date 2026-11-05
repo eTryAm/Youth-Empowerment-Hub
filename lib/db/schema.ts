@@ -296,3 +296,47 @@ export type NewAuditLog = typeof auditLogs.$inferInsert;
 
 export type NavigationItem = typeof navigationItems.$inferSelect;
 export type NewNavigationItem = typeof navigationItems.$inferInsert;
+
+// ── Learning Hub ──────────────────────────────────────────────────────────────
+
+export const articleStatusEnum = pgEnum('article_status', ['draft', 'published', 'archived']);
+
+export const articleCategories = pgTable('article_categories', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  slug: text('slug').unique().notNull(),
+  description: text('description'),
+  icon: text('icon'),
+  displayOrder: integer('display_order').default(0),
+  status: contentStatusEnum('status').default('published'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const articles = pgTable('articles', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  slug: text('slug').unique().notNull(),
+  excerpt: text('excerpt'),
+  content: text('content'), // JSON string (TipTap/ProseMirror doc) or HTML
+  contentFormat: text('content_format').default('html'), // 'html' | 'tiptap'
+  categoryId: uuid('category_id').references(() => articleCategories.id, { onDelete: 'set null' }),
+  featuredImageUrl: text('featured_image_url'),
+  featuredImageAlt: text('featured_image_alt'),
+  author: text('author').default('YEH Editorial Team'),
+  authorId: uuid('author_id').references(() => users.id, { onDelete: 'set null' }),
+  seoTitle: text('seo_title'),
+  seoDescription: text('seo_description'),
+  status: articleStatusEnum('status').default('draft'),
+  featured: boolean('featured').default(false),
+  readingTimeMinutes: integer('reading_time_minutes'),
+  publishedAt: timestamp('published_at'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export type ArticleCategory = typeof articleCategories.$inferSelect;
+export type NewArticleCategory = typeof articleCategories.$inferInsert;
+
+export type Article = typeof articles.$inferSelect;
+export type NewArticle = typeof articles.$inferInsert;

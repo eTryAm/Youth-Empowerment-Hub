@@ -81,6 +81,12 @@ export const PERMISSIONS = {
   'features.edit': [ROLES.SUPER_ADMIN],
   // Audit logs
   'audit.view': [ROLES.SUPER_ADMIN],
+  // Articles / Learning Hub
+  'articles.create': [ROLES.SUPER_ADMIN, ROLES.CONTENT_ADMIN],
+  'articles.edit': [ROLES.SUPER_ADMIN, ROLES.CONTENT_ADMIN],
+  'articles.delete': [ROLES.SUPER_ADMIN],
+  'articles.view': [ROLES.SUPER_ADMIN, ROLES.CONTENT_ADMIN, ROLES.VIEWER],
+  'articles.publish': [ROLES.SUPER_ADMIN, ROLES.CONTENT_ADMIN],
 } as const;
 
 export type Permission = keyof typeof PERMISSIONS;

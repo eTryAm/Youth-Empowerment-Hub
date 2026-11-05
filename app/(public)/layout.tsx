@@ -37,7 +37,8 @@ export default async function PublicLayout({ children }: LayoutProps<'/'>) {
       <Header 
         navItems={navItems} 
         siteName={siteName} 
-        notifications={allAnnouncements} 
+        notifications={allAnnouncements}
+        donationEnabled={Boolean(flags.donation_enabled)}
       />
       <main className="flex-1">{children}</main>
       <Footer settings={settings} />

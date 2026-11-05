@@ -22,6 +22,7 @@ import {
   Settings,
   Users,
   FileText,
+  BookOpen,
   ChevronLeft,
   ChevronRight,
   Menu
@@ -47,6 +48,7 @@ const navGroups = [
       { name: 'Initiatives', href: '/admin/initiatives', icon: Rocket },
       { name: 'Objectives', href: '/admin/objectives', icon: Target },
       { name: 'Announcements', href: '/admin/announcements', icon: Megaphone },
+      { name: 'Knowledge & Updates', href: '/admin/articles', icon: BookOpen },
       { name: 'Gallery & Glimpses', href: '/admin/gallery', icon: ImageIcon },
     ]
   },

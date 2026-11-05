@@ -28,6 +28,7 @@ export const defaultNavItems = [
   { label: 'Platforms', url: '/platforms' },
   { label: 'Initiatives', url: '/initiatives' },
   { label: 'Events', url: '/events' },
+  { label: 'Knowledge & Updates', url: '/learn' },
   { label: 'Gallery', url: '/gallery' },
   { label: 'About', url: '/about' },
   { label: 'Contact', url: '/contact' },

@@ -15,12 +15,14 @@ interface HeaderProps {
   navItems?: { label: string; url: string }[];
   siteName?: string;
   notifications?: NotificationItem[];
+  donationEnabled?: boolean;
 }
 
 export function Header({ 
   navItems = [], 
   siteName = 'Youth Empowerment Hub',
-  notifications = [] 
+  notifications = [],
+  donationEnabled = false,
 }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isDonationOpen, setIsDonationOpen] = useState(false);
@@ -94,32 +96,33 @@ export function Header({
             );
           })}
 
-          
           <NotificationsPopover notifications={notifications} />
 
-          {/* Desktop Hovering / Pulsing Donate Button */}
-          <motion.button
-            type="button"
-            onClick={() => setIsDonationOpen(true)}
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.95 }}
-            animate={{
-              boxShadow: [
-                '0 0 0 0 rgba(249, 115, 22, 0.4)',
-                '0 0 0 8px rgba(249, 115, 22, 0)',
-                '0 0 0 0 rgba(249, 115, 22, 0.4)',
-              ],
-            }}
-            transition={{
-              duration: 2.2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-            className="ml-1 px-3.5 xl:px-4 py-1.5 xl:py-2 rounded-full bg-gradient-to-r from-[#F97316] via-[#EA580C] to-[#E11D48] text-white font-extrabold text-xs xl:text-sm shadow-md shadow-orange-500/25 hover:shadow-orange-500/40 transition-all flex items-center gap-1.5 cursor-pointer border border-white/20 shrink-0 whitespace-nowrap"
-          >
-            <span>Donate</span>
-            <span className="text-sm">❤️</span>
-          </motion.button>
+          {/* Desktop Hovering / Pulsing Donate Button — only shown when donation is enabled */}
+          {donationEnabled && (
+            <motion.button
+              type="button"
+              onClick={() => setIsDonationOpen(true)}
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.95 }}
+              animate={{
+                boxShadow: [
+                  '0 0 0 0 rgba(249, 115, 22, 0.4)',
+                  '0 0 0 8px rgba(249, 115, 22, 0)',
+                  '0 0 0 0 rgba(249, 115, 22, 0.4)',
+                ],
+              }}
+              transition={{
+                duration: 2.2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="ml-1 px-3.5 xl:px-4 py-1.5 xl:py-2 rounded-full bg-gradient-to-r from-[#F97316] via-[#EA580C] to-[#E11D48] text-white font-extrabold text-xs xl:text-sm shadow-md shadow-orange-500/25 hover:shadow-orange-500/40 transition-all flex items-center gap-1.5 cursor-pointer border border-white/20 shrink-0 whitespace-nowrap"
+            >
+              <span>Donate</span>
+              <span className="text-sm">❤️</span>
+            </motion.button>
+          )}
 
           <Button
             asChild
@@ -133,15 +136,17 @@ export function Header({
         {/* Mobile Header: ONLY Notification Bell + Hamburger (Donate is inside Hamburger) */}
         <div className="lg:hidden flex items-center gap-2 shrink-0">
           <NotificationsPopover notifications={notifications} />
-          <MobileNav navItems={navItems} siteName={siteName} />
+          <MobileNav navItems={navItems} siteName={siteName} donationEnabled={donationEnabled} />
         </div>
       </div>
 
       {/* Desktop Donation Modal */}
-      <DonationModal
-        isOpen={isDonationOpen}
-        onClose={() => setIsDonationOpen(false)}
-      />
+      {donationEnabled && (
+        <DonationModal
+          isOpen={isDonationOpen}
+          onClose={() => setIsDonationOpen(false)}
+        />
+      )}
     </header>
   );
 }

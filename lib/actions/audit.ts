@@ -89,6 +89,16 @@ export const AUDIT_ACTIONS = {
 
   // Contact
   CONTACT_STATUS_UPDATED: 'contact.status_updated',
+
+  // Articles / Learning Hub
+  ARTICLE_CREATED: 'article.created',
+  ARTICLE_UPDATED: 'article.updated',
+  ARTICLE_PUBLISHED: 'article.published',
+  ARTICLE_UNPUBLISHED: 'article.unpublished',
+  ARTICLE_DELETED: 'article.deleted',
+  ARTICLE_CATEGORY_CREATED: 'article_category.created',
+  ARTICLE_CATEGORY_UPDATED: 'article_category.updated',
+  ARTICLE_CATEGORY_DELETED: 'article_category.deleted',
 } as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];
