@@ -1,0 +1,222 @@
+.overlay {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 43%, rgba(255, 251, 246, 0.54), rgba(255, 251, 246, 0) 31%),
+    radial-gradient(circle at 12% 22%, rgba(250, 207, 218, 0.14), rgba(250, 207, 218, 0) 27%),
+    radial-gradient(circle at 88% 72%, rgba(248, 220, 147, 0.12), rgba(248, 220, 147, 0) 25%);
+  animation: overlayFade 4.5s ease-out both;
+}
+
+.motifs {
+  position: absolute;
+  inset: 0;
+}
+
+.motif {
+  position: absolute;
+  z-index: 1;
+  top: -12vh;
+  left: var(--left);
+  width: var(--size);
+  height: var(--size);
+  color: var(--motif-color);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: fall var(--duration) cubic-bezier(0.2, 0.65, 0.38, 1) var(--delay) both;
+}
+
+.petal {
+  width: calc(var(--size) * 0.72);
+  height: var(--size);
+  border-radius: 80% 18% 76% 22%;
+  background:
+    linear-gradient(132deg, rgba(255, 255, 255, 0.7) 0%, transparent 30%),
+    var(--motif-color);
+  box-shadow: inset 2px 1px 3px rgba(255, 255, 255, 0.38), 0 4px 8px rgba(134, 78, 92, 0.08);
+}
+
+.blossom {
+  width: calc(var(--size) * 0.56);
+  height: calc(var(--size) * 0.56);
+  border-radius: 50%;
+  background: #d99c4d;
+  box-shadow:
+    0 calc(var(--size) * -0.34) 0 calc(var(--size) * 0.04) var(--motif-color),
+    calc(var(--size) * 0.34) 0 0 calc(var(--size) * 0.04) var(--motif-color),
+    0 calc(var(--size) * 0.34) 0 calc(var(--size) * 0.04) var(--motif-color),
+    calc(var(--size) * -0.34) 0 0 calc(var(--size) * 0.04) var(--motif-color);
+}
+
+.sparkle {
+  background: var(--motif-color);
+  clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+  filter: drop-shadow(0 0 5px rgba(213, 165, 57, 0.42));
+}
+
+.glow {
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.94) 0 12%, var(--motif-color) 31%, rgba(249, 224, 144, 0) 72%);
+  filter: blur(0.25px);
+}
+
+.messageWrap {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: min(680px, calc(100% - 3rem));
+  padding: clamp(1.35rem, 3vw, 2.25rem) clamp(1.5rem, 5vw, 3.5rem) clamp(1.15rem, 2.6vw, 1.8rem);
+  text-align: center;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(216, 167, 66, 0.42);
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, rgba(255, 253, 249, 0.9), rgba(255, 246, 239, 0.72));
+  box-shadow:
+    0 22px 55px rgba(82, 43, 62, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.message {
+  margin: 0;
+  color: #492638;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.65rem, 3.2vw, 3.15rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.14;
+  text-wrap: balance;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85), 0 5px 18px rgba(105, 67, 76, 0.08);
+  opacity: 0;
+  animation: messageReveal 4.15s cubic-bezier(0.16, 0.8, 0.25, 1) both;
+}
+
+.signature {
+  display: inline-block;
+  margin-top: 0.9rem;
+  color: #87601c;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: signatureReveal 4.1s ease both;
+}
+
+.signature::before,
+.signature::after {
+  display: inline-block;
+  width: 1.6rem;
+  height: 1px;
+  margin: 0 0.55rem 0.2rem;
+  background: linear-gradient(90deg, transparent, rgba(176, 127, 35, 0.72));
+  content: '';
+}
+
+.signature::after {
+  background: linear-gradient(90deg, rgba(176, 127, 35, 0.72), transparent);
+}
+
+@keyframes fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -8vh, 0) rotate(var(--rotation)) scale(0.78);
+  }
+
+  10% {
+    opacity: var(--motif-opacity);
+  }
+
+  78% {
+    opacity: calc(var(--motif-opacity) * 0.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift), 115vh, 0) rotate(calc(var(--rotation) + 240deg)) scale(1.08);
+  }
+}
+
+@keyframes messageReveal {
+  0%, 21% {
+    opacity: 0;
+    transform: translateY(13px);
+  }
+
+  34%, 68% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes signatureReveal {
+  0%, 28% {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  39%, 68% {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes overlayFade {
+  0%, 63% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .messageWrap {
+    width: min(540px, calc(100% - 2rem));
+    padding: 1.15rem 1rem 1rem;
+    border-radius: 1rem;
+  }
+
+  .message {
+    font-size: clamp(1.5rem, 8vw, 2.2rem);
+    line-height: 1.18;
+  }
+
+  .motif:nth-child(3n) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    animation: none;
+  }
+
+  .motifs {
+    display: none;
+  }
+
+  .message,
+  .signature {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

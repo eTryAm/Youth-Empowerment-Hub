@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import { Toaster } from 'sonner';
+import { WelcomeFlowerShower } from '@/components/shared/welcome-flower-shower';
 import { getSiteUrl } from '@/lib/site-url';
 import './globals.css';
 
@@ -144,6 +145,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           strategy="afterInteractive"
         />
         {children}
+        <WelcomeFlowerShower />
         <Toaster
           position="top-right"
           toastOptions={{
