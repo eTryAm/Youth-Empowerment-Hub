@@ -25,6 +25,7 @@ export function SubmitArticleForm({ categories }: SubmitFormProps) {
   const [email, setEmail] = useState('');
   const [title, setTitle] = useState('');
   const [categoryId, setCategoryId] = useState('');
+  const [customCategory, setCustomCategory] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   // honeypot
@@ -46,7 +47,8 @@ export function SubmitArticleForm({ categories }: SubmitFormProps) {
         submittedByName: name,
         submittedByEmail: email,
         title,
-        categoryId: categoryId || null,
+        categoryId: categoryId === 'other' ? null : categoryId || null,
+        customCategoryName: categoryId === 'other' ? customCategory.trim() : null,
         excerpt: excerpt || undefined,
         contentPlaintext: content,
       });
@@ -150,21 +152,40 @@ export function SubmitArticleForm({ categories }: SubmitFormProps) {
           />
         </div>
 
-        {categories.length > 0 && (
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
-            <select
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">— Select a category (optional) —</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">— Select a category (optional) —</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+            <option value="other">✨ Other (Specify your own category)...</option>
+          </select>
+        </div>
+
+        {categoryId === 'other' && (
+          <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 space-y-2">
+            <label className="block text-sm font-semibold text-blue-950">
+              Specify Category Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={customCategory}
+              onChange={(e) => setCustomCategory(e.target.value)}
+              required={categoryId === 'other'}
+              maxLength={100}
+              placeholder="e.g. Design & Creative Arts, Mental Wellness, Sports..."
+              className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p className="text-xs text-blue-700">
+              Tell us the topic or category your article belongs to. Our editorial team will assign or create it.
+            </p>
           </div>
         )}
 

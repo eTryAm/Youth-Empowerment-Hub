@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { createArticle, updateArticle } from '@/lib/actions/articles';
+import { createArticle, updateArticle, createArticleCategory } from '@/lib/actions/articles';
 import { cleanImageUrl } from '@/lib/image-url';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -64,6 +64,12 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
   const [isPending, startTransition] = useTransition();
   const isEditing = Boolean(initialData?.id);
 
+  const [categoryList, setCategoryList] = useState(categories);
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const [newCatName, setNewCatName] = useState('');
+  const [newCatSlug, setNewCatSlug] = useState('');
+  const [isCreatingCat, setIsCreatingCat] = useState(false);
+
   const [title, setTitle] = useState(initialData?.title ?? '');
   const [slug, setSlug] = useState(initialData?.slug ?? '');
   const [slugTouched, setSlugTouched] = useState(isEditing);
@@ -97,6 +103,39 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
   function handleSlugChange(value: string) {
     setSlugTouched(true);
     setSlug(value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
+  }
+
+  async function handleCreateInlineCategory(e: React.MouseEvent) {
+    e.preventDefault();
+    if (!newCatName.trim()) {
+      toast.error('Category name is required.');
+      return;
+    }
+    const finalSlug = (newCatSlug.trim() || slugify(newCatName)).toLowerCase();
+    setIsCreatingCat(true);
+    try {
+      const res = await createArticleCategory({
+        name: newCatName.trim(),
+        slug: finalSlug,
+        displayOrder: categoryList.length,
+        status: 'published',
+      });
+      if (res.success && res.data) {
+        toast.success(`Category "${res.data.name}" created.`);
+        const newCat = { id: res.data.id, name: res.data.name, slug: res.data.slug };
+        setCategoryList((prev) => [...prev, newCat]);
+        setCategoryId(res.data.id);
+        setShowNewCategory(false);
+        setNewCatName('');
+        setNewCatSlug('');
+      } else {
+        toast.error(res.error ?? 'Failed to create category.');
+      }
+    } catch {
+      toast.error('Failed to create category.');
+    } finally {
+      setIsCreatingCat(false);
+    }
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -193,33 +232,108 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
         <div>
           <div className="flex items-center justify-between mb-1">
             <label className="block text-sm font-medium text-slate-700">Category</label>
-            <Link
-              href="/admin/articles/categories"
-              className="text-xs text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              + Manage categories
-            </Link>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowNewCategory(!showNewCategory)}
+                className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
+              >
+                {showNewCategory ? '✕ Close new category' : '+ Create category inline'}
+              </button>
+              <Link
+                href="/admin/articles/categories"
+                className="text-xs text-slate-500 hover:text-slate-700 transition-colors"
+              >
+                Manage all
+              </Link>
+            </div>
           </div>
+
           <select
             value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value === '__new__') {
+                setShowNewCategory(true);
+              } else {
+                setCategoryId(e.target.value);
+              }
+            }}
             className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            <option value="">— No category —</option>
-            {categories.map((cat) => (
+            <option value="">— Select a category —</option>
+            {categoryList.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
               </option>
             ))}
+            <option value="__new__">✨ + Add New Category...</option>
           </select>
-          {categories.length === 0 && (
-            <p className="text-xs text-amber-600 mt-1">
-              No categories yet.{' '}
-              <Link href="/admin/articles/categories" className="underline font-medium">
-                Create one first
-              </Link>
-              , then come back to this form.
-            </p>
+
+          {/* Inline Category Creator */}
+          {showNewCategory && (
+            <div className="mt-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">
+                  Create Category Instantly
+                </span>
+                <span className="text-[11px] text-blue-700">No need to leave this page</span>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    Category Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={newCatName}
+                    onChange={(e) => {
+                      setNewCatName(e.target.value);
+                      setNewCatSlug(slugify(e.target.value));
+                    }}
+                    placeholder="e.g. Design & Creative Arts"
+                    className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    Slug <span className="text-slate-400 font-normal">(auto-generated URL path)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={newCatSlug}
+                    onChange={(e) => setNewCatSlug(slugify(e.target.value))}
+                    placeholder="design-creative-arts"
+                    className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-mono bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[11px] text-slate-500 font-mono">
+                  URL: /learn/category/{newCatSlug || '…'}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowNewCategory(false);
+                      setNewCatName('');
+                      setNewCatSlug('');
+                    }}
+                    className="px-3 py-1 text-xs text-slate-600 bg-white border border-slate-200 hover:bg-slate-100 rounded-lg"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCreateInlineCategory}
+                    disabled={isCreatingCat || !newCatName.trim()}
+                    className="px-3.5 py-1 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors cursor-pointer"
+                  >
+                    {isCreatingCat ? 'Creating…' : 'Save & Select'}
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
 

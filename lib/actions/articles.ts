@@ -52,7 +52,8 @@ const submissionSchema = z.object({
   submittedByEmail: z.string().email('A valid email is required'),
   excerpt: z.string().max(400).optional(),
   contentPlaintext: z.string().min(80, 'Article must be at least 80 characters').max(50000),
-  categoryId: z.string().uuid().optional().nullable(),
+  categoryId: z.string().uuid().optional().nullable().or(z.literal('other')).or(z.literal('')),
+  customCategoryName: z.string().max(100).optional().nullable(),
 });
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -414,7 +415,41 @@ export async function submitArticleForReview(data: unknown) {
     return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid data' };
   }
 
-  const { title, submittedByName, submittedByEmail, excerpt, contentPlaintext, categoryId } = parsed.data;
+  const { title, submittedByName, submittedByEmail, excerpt, contentPlaintext, categoryId, customCategoryName } = parsed.data;
+
+  // Resolve category if customCategoryName is provided or categoryId === 'other'
+  let resolvedCategoryId: string | null = categoryId && categoryId !== 'other' ? categoryId : null;
+  if (customCategoryName && customCategoryName.trim()) {
+    const customName = customCategoryName.trim();
+    const customSlug = slugify(customName);
+    try {
+      const [existingCat] = await db
+        .select({ id: articleCategories.id })
+        .from(articleCategories)
+        .where(eq(articleCategories.slug, customSlug))
+        .limit(1);
+
+      if (existingCat) {
+        resolvedCategoryId = existingCat.id;
+      } else {
+        const [createdCat] = await db
+          .insert(articleCategories)
+          .values({
+            name: customName,
+            slug: customSlug,
+            description: `Articles in ${customName}.`,
+            displayOrder: 99,
+            status: 'published',
+          })
+          .returning({ id: articleCategories.id });
+        if (createdCat) {
+          resolvedCategoryId = createdCat.id;
+        }
+      }
+    } catch (e) {
+      console.error('[submitArticleForReview customCategory]', e);
+    }
+  }
 
   // Auto-generate unique slug
   const baseSlug = slugify(title);
@@ -435,7 +470,7 @@ export async function submitArticleForReview(data: unknown) {
       content,
       contentPlaintext,
       contentFormat: 'html',
-      categoryId: categoryId || null,
+      categoryId: resolvedCategoryId,
       author: submittedByName,
       submittedByName,
       submittedByEmail,

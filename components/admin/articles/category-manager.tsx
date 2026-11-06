@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Plus, Pencil, Trash2, Check, X, GripVertical } from 'lucide-react';
+import { Plus, Pencil, Trash2, Check, X, GripVertical, HelpCircle, ExternalLink } from 'lucide-react';
 import {
   createArticleCategory,
   updateArticleCategory,
@@ -26,9 +26,11 @@ function slugify(str: string): string {
   return str
     .toLowerCase()
     .trim()
+    .replace(/&+/g, 'and')
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
     .slice(0, 120);
 }
 
@@ -70,9 +72,15 @@ export function CategoryManager({ categories: initialCategories }: CategoryManag
   }
 
   function handleAddSlugChange(value: string) {
+    const sanitized = value
+      .toLowerCase()
+      .replace(/&/g, 'and')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
+      .replace(/-+/g, '-');
     setAddForm((prev) => ({
       ...prev,
-      slug: value.toLowerCase().replace(/[^a-z0-9-]/g, ''),
+      slug: sanitized,
       slugTouched: true,
     }));
   }
@@ -127,9 +135,15 @@ export function CategoryManager({ categories: initialCategories }: CategoryManag
   }
 
   function handleEditSlugChange(value: string) {
+    const sanitized = value
+      .toLowerCase()
+      .replace(/&/g, 'and')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
+      .replace(/-+/g, '-');
     setEditForm((prev) => ({
       ...prev,
-      slug: value.toLowerCase().replace(/[^a-z0-9-]/g, ''),
+      slug: sanitized,
     }));
   }
 
@@ -212,25 +226,75 @@ export function CategoryManager({ categories: initialCategories }: CategoryManag
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-slate-900">Article Categories</h2>
+          <h2 className="text-xl font-black text-slate-900">Article Categories</h2>
           <p className="text-sm text-slate-500 mt-0.5">
-            Organise articles into categories. Categories appear in the public Knowledge &amp; Updates section.
+            Organise articles into categories. Categories appear on the public Knowledge &amp; Updates section.
           </p>
         </div>
         <button
           onClick={() => { setShowAdd(true); setEditingId(null); }}
           disabled={showAdd}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors cursor-pointer"
         >
           <Plus size={15} />
           New Category
         </button>
       </div>
 
+      {/* Educational Guide: What is a Slug & Can anything be a slug? */}
+      <div className="bg-gradient-to-r from-blue-50/90 via-indigo-50/70 to-sky-50/90 border border-blue-200/90 rounded-2xl p-5 text-sm text-slate-800 shadow-xs">
+        <div className="flex items-center gap-2 text-blue-950 font-bold mb-2.5">
+          <HelpCircle size={18} className="text-blue-600 shrink-0" />
+          <span className="text-base font-extrabold">What is a &quot;Slug&quot; &amp; Can Anything Be a Slug?</span>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 text-xs leading-relaxed text-slate-600">
+          <div className="bg-white/90 p-3.5 rounded-xl border border-blue-100/90">
+            <p className="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+              <span>🔗 What is a Slug?</span>
+            </p>
+            <p>
+              A slug is the <strong>unique, web-friendly identifier</strong> that forms the address (URL) of the category on your website.
+            </p>
+            <p className="mt-1 text-slate-600">
+              For example: If category name is <strong>Skill Development</strong>, its slug is{' '}
+              <code className="bg-blue-100/80 text-blue-800 px-1.5 py-0.5 rounded font-mono font-bold">
+                skill-development
+              </code>
+              , and visitors view all its articles at{' '}
+              <span className="text-blue-600 font-bold font-mono">
+                /learn/category/skill-development
+              </span>.
+            </p>
+          </div>
+          <div className="bg-white/90 p-3.5 rounded-xl border border-blue-100/90">
+            <p className="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+              <span>⛔ Can anything be a slug?</span>
+            </p>
+            <p>
+              <strong>No.</strong> Web URL standards strictly forbid spaces, uppercase letters, and special symbols.
+            </p>
+            <ul className="mt-1 space-y-0.5 list-disc list-inside text-slate-600">
+              <li>
+                <strong>Allowed:</strong> Lowercase letters (<code className="font-mono">a–z</code>), numbers (<code className="font-mono">0–9</code>), and hyphens (<code className="font-mono">-</code>).
+              </li>
+              <li>
+                <strong>Not allowed:</strong> Spaces, capitals, and symbols (<code className="text-red-600 font-bold font-mono">&amp; ? / % @ # !</code>).
+              </li>
+              <li className="text-emerald-700 font-semibold">
+                ✨ <em>Our system automatically formats and cleans your slug in real-time as you type!</em>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       {/* Add inline form */}
       {showAdd && (
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-blue-900">New Category</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-blue-950">Create New Category</h3>
+            <span className="text-xs text-blue-600 font-medium">Slug auto-generates from name</span>
+          </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-slate-700 mb-1">
@@ -241,25 +305,31 @@ export function CategoryManager({ categories: initialCategories }: CategoryManag
                 value={addForm.name}
                 onChange={(e) => handleAddNameChange(e.target.value)}
                 maxLength={100}
-                placeholder="e.g. Career &amp; Opportunities"
+                placeholder="e.g. Design &amp; Creative Arts"
                 autoFocus
-                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                Slug <span className="text-red-500">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-medium text-slate-700">
+                  Slug <span className="text-red-500">*</span>
+                </label>
+                <span className="text-[10px] text-slate-400">Lowercase letters, numbers, hyphens only</span>
+              </div>
               <input
                 type="text"
                 value={addForm.slug}
                 onChange={(e) => handleAddSlugChange(e.target.value)}
                 maxLength={120}
-                placeholder="career-opportunities"
-                pattern="^[a-z0-9-]+"
-                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="design-and-creative-arts"
+                pattern="^[a-z0-9-]+$"
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <p className="text-xs text-slate-400 mt-1">URL: /learn/category/{addForm.slug || '…'}</p>
+              <div className="mt-1 flex items-center gap-1.5 text-xs text-blue-700 font-mono">
+                <span>🌐 Public URL:</span>
+                <span className="font-bold">/learn/category/{addForm.slug || '…'}</span>
+              </div>
             </div>
           </div>
           <div>
@@ -270,7 +340,7 @@ export function CategoryManager({ categories: initialCategories }: CategoryManag
               onChange={(e) => setAddForm((prev) => ({ ...prev, description: e.target.value }))}
               maxLength={500}
               placeholder="Short description shown on the category page"
-              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div className="flex gap-3 justify-end">
@@ -379,9 +449,16 @@ export function CategoryManager({ categories: initialCategories }: CategoryManag
                     </td>
                     <td className="px-4 py-4 font-medium text-slate-900">{cat.name}</td>
                     <td className="px-4 py-4 hidden sm:table-cell">
-                      <code className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">
-                        {cat.slug}
-                      </code>
+                      <a
+                        href={`/learn/category/${cat.slug}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="View category page on public site"
+                        className="inline-flex items-center gap-1.5 text-xs bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 px-2.5 py-1 rounded font-mono transition-colors group"
+                      >
+                        <span>{cat.slug}</span>
+                        <ExternalLink size={11} className="text-slate-400 group-hover:text-blue-600" />
+                      </a>
                     </td>
                     <td className="px-4 py-4 hidden lg:table-cell text-slate-500 text-xs">
                       {cat.description ?? <span className="text-slate-300">—</span>}
