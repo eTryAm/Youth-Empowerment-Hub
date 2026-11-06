@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { toast } from 'sonner';
 import { createArticle, updateArticle } from '@/lib/actions/articles';
 
@@ -165,7 +166,15 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
 
         {/* Category */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-sm font-medium text-slate-700">Category</label>
+            <Link
+              href="/admin/articles/categories"
+              className="text-xs text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              + Manage categories
+            </Link>
+          </div>
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
@@ -178,6 +187,15 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
               </option>
             ))}
           </select>
+          {categories.length === 0 && (
+            <p className="text-xs text-amber-600 mt-1">
+              No categories yet.{' '}
+              <Link href="/admin/articles/categories" className="underline font-medium">
+                Create one first
+              </Link>
+              , then come back to this form.
+            </p>
+          )}
         </div>
 
         {/* Author */}

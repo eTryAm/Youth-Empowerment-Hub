@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Compass, Sparkles, Briefcase, Camera } from 'lucide-react';
+import { ArrowRight, Compass, Sparkles, Briefcase, Camera, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import { PlatformIntroModal } from '@/components/public/platform-intro-modal';
 import type { PlatformCardData } from '@/components/public/platform-card';
@@ -140,6 +140,14 @@ export function Hero({ heroConfig, platforms = [] }: HeroProps) {
             <Camera className="w-4 h-4 text-cyan-600" />
             <span>Activity Glimpses</span>
           </Link>
+
+          <Link
+            href="/learn"
+            className="group w-full sm:w-auto flex h-12 sm:h-13 items-center justify-center gap-2 rounded-2xl border border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100/80 px-5 sm:px-6 text-sm sm:text-base font-semibold text-indigo-900 shadow-xs transition-all duration-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Knowledge &amp; Updates</span>
+          </Link>
         </motion.div>
 
         {/* Central Ecosystem Platform Quick Launch Dock */}
@@ -201,6 +209,19 @@ export function Hero({ heroConfig, platforms = [] }: HeroProps) {
                 <div className="text-[11px] sm:text-xs text-slate-500 truncate">Sports & Tournaments</div>
               </div>
             </button>
+          </div>
+
+          {/* Knowledge & Updates quick-link */}
+          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400 font-medium">More from YEH:</span>
+            <Link
+              href="/learn"
+              className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-blue-600 hover:text-blue-800 transition-colors group"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Knowledge &amp; Updates
+              <ArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </motion.div>
       </div>

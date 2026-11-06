@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Plus, FileText } from 'lucide-react';
+import { Plus, FileText, Tag } from 'lucide-react';
 import { getAdminArticles, getAdminArticleCategories } from '@/lib/actions/articles';
 import { ArticleListClient } from '@/components/admin/articles/article-list-client';
 
@@ -14,20 +14,34 @@ export default async function AdminArticlesPage() {
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-black text-slate-900">Knowledge &amp; Updates</h1>
           <p className="text-sm text-slate-500 mt-1">
             Manage articles and announcements published on the public Knowledge &amp; Updates section.
           </p>
         </div>
-        <Link
-          href="/admin/articles/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shrink-0"
-        >
-          <Plus size={16} />
-          New Article
-        </Link>
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            href="/admin/articles/categories"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors"
+          >
+            <Tag size={15} />
+            Categories
+            {categories.length > 0 && (
+              <span className="ml-0.5 inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold bg-slate-100 text-slate-600 rounded-full">
+                {categories.length}
+              </span>
+            )}
+          </Link>
+          <Link
+            href="/admin/articles/new"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
+          >
+            <Plus size={16} />
+            New Article
+          </Link>
+        </div>
       </div>
 
       {/* Stats strip */}
