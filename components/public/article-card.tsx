@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { Clock, Calendar, ArrowRight, BookOpen } from 'lucide-react';
+import { Clock, Calendar, ArrowRight, BookOpen, Eye } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -12,6 +11,7 @@ interface ArticleCardProps {
   author?: string | null;
   publishedAt?: Date | null;
   readingTimeMinutes?: number | null;
+  viewCount?: number | null;
   categoryName?: string | null;
   categorySlug?: string | null;
   featured?: boolean;
@@ -27,6 +27,7 @@ export function ArticleCard({
   author,
   publishedAt,
   readingTimeMinutes,
+  viewCount,
   categoryName,
   categorySlug,
   featured,
@@ -44,12 +45,12 @@ export function ArticleCard({
       {/* Featured Image */}
       {featuredImageUrl ? (
         <div className="relative overflow-hidden bg-slate-100 aspect-video">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={featuredImageUrl}
             alt={title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
           />
           {featured && (
             <span className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow">
@@ -104,6 +105,12 @@ export function ArticleCard({
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
                 {readingTimeMinutes} min read
+              </span>
+            )}
+            {viewCount != null && viewCount > 0 && (
+              <span className="flex items-center gap-1">
+                <Eye className="w-3.5 h-3.5" />
+                {viewCount.toLocaleString('en-IN')}
               </span>
             )}
           </div>

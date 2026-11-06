@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BookOpen, ArrowRight } from 'lucide-react';
+import { BookOpen, ArrowRight, PenLine } from 'lucide-react';
 import { PageHero } from '@/components/public/page-hero';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { ArticleCard } from '@/components/public/article-card';
@@ -9,6 +9,7 @@ import { webPageSchema } from '@/components/seo/schema';
 import { getPublishedArticles } from '@/lib/public/queries';
 import { getSiteUrl } from '@/lib/site-url';
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Knowledge & Updates — Youth Empowerment Hub',
   description:
@@ -84,6 +85,7 @@ export default async function KnowledgePage() {
                 author={article.author}
                 publishedAt={article.publishedAt}
                 readingTimeMinutes={article.readingTimeMinutes}
+                viewCount={article.viewCount}
                 categoryName={article.categoryName}
                 categorySlug={article.categorySlug}
                 featured
@@ -95,19 +97,28 @@ export default async function KnowledgePage() {
 
       {/* Latest Articles */}
       <SectionWrapper>
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
           <div>
             <h2 className="text-2xl font-black text-slate-900">Latest Articles</h2>
             <p className="text-slate-500 mt-1 text-sm">Recently published guides and updates</p>
           </div>
-          {latestArticles.length >= 9 && (
+          <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <Link
-              href="/learn?all=1"
-              className="hidden sm:flex items-center gap-1.5 text-blue-600 font-semibold text-sm hover:text-blue-700 transition-colors shrink-0"
+              href="/learn/submit"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
             >
-              View all <ArrowRight className="w-4 h-4" />
+              <PenLine className="w-4 h-4" />
+              Submit an Article
             </Link>
-          )}
+            {latestArticles.length >= 9 && (
+              <Link
+                href="/learn?all=1"
+                className="hidden sm:flex items-center gap-1.5 text-blue-600 font-semibold text-sm hover:text-blue-700 transition-colors"
+              >
+                View all <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
+          </div>
         </div>
 
         {latestArticles.length > 0 ? (
@@ -122,6 +133,7 @@ export default async function KnowledgePage() {
                 author={article.author}
                 publishedAt={article.publishedAt}
                 readingTimeMinutes={article.readingTimeMinutes}
+                viewCount={article.viewCount}
                 categoryName={article.categoryName}
                 categorySlug={article.categorySlug}
                 featured={article.featured ?? false}

@@ -84,13 +84,20 @@ export function Header({
                 key={item.url}
                 href={item.url}
                 className={cn(
-                  'text-xs xl:text-sm font-semibold transition-colors relative py-1.5 px-2.5 xl:px-3 rounded-xl whitespace-nowrap',
+                  'text-xs xl:text-sm font-semibold transition-colors relative py-1.5 px-2 xl:px-3 rounded-xl whitespace-nowrap',
                   isActive ? 'text-blue-600 font-bold bg-blue-50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                 )}
               >
-                {item.label}
+                {item.url === '/learn' ? (
+                  <>
+                    <span className="hidden xl:inline">{item.label}</span>
+                    <span className="xl:hidden">Knowledge</span>
+                  </>
+                ) : (
+                  item.label
+                )}
                 {isActive && (
-                  <span className="absolute bottom-0 left-2.5 right-2.5 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full" />
+                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full" />
                 )}
               </Link>
             );

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Calendar, Clock, User, ChevronRight, BookOpen } from 'lucide-react';
+import { Calendar, Clock, User, ChevronRight, BookOpen, Eye } from 'lucide-react';
 import { format } from 'date-fns';
 import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { ArticleCard } from '@/components/public/article-card';
+import { ArticleViewTracker } from '@/components/public/article-view-tracker';
 import { JsonLd } from '@/components/seo/json-ld';
 import { breadcrumbSchema } from '@/components/seo/schema';
 import {
@@ -14,6 +14,8 @@ import {
 } from '@/lib/public/queries';
 import { getSiteUrl } from '@/lib/site-url';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+
+export const dynamic = 'force-dynamic';
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -103,6 +105,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <JsonLd data={[articleSchema, breadcrumb]} />
+      {/* Fire-and-forget view count increment on client */}
+      <ArticleViewTracker slug={slug} />
 
       {/* Hero / Header */}
       <section className="bg-[#0A0F1C] text-white py-14 px-4">
@@ -162,20 +166,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {article.readingTimeMinutes} min read
               </span>
             )}
+            {article.viewCount != null && article.viewCount > 0 && (
+              <span className="flex items-center gap-1.5">
+                <Eye className="w-4 h-4" />
+                {article.viewCount.toLocaleString('en-IN')} reads
+              </span>
+            )}
           </div>
         </div>
       </section>
 
       {/* Featured Image */}
       {article.featuredImageUrl && (
-        <div className="relative w-full max-w-4xl mx-auto overflow-hidden aspect-video bg-slate-100">
-          <Image
+        <div className="w-full max-w-4xl mx-auto overflow-hidden aspect-video bg-slate-100">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={article.featuredImageUrl}
             alt={article.featuredImageAlt ?? article.title}
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 896px) 100vw, 896px"
+            className="w-full h-full object-cover"
+            loading="eager"
           />
         </div>
       )}
@@ -230,6 +239,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 author={rel.author}
                 publishedAt={rel.publishedAt}
                 readingTimeMinutes={rel.readingTimeMinutes}
+                viewCount={rel.viewCount}
                 categoryName={rel.categoryName}
                 categorySlug={rel.categorySlug}
                 size="compact"

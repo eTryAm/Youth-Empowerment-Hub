@@ -299,7 +299,7 @@ export type NewNavigationItem = typeof navigationItems.$inferInsert;
 
 // ── Learning Hub ──────────────────────────────────────────────────────────────
 
-export const articleStatusEnum = pgEnum('article_status', ['draft', 'published', 'archived']);
+export const articleStatusEnum = pgEnum('article_status', ['draft', 'pending_review', 'published', 'archived', 'rejected']);
 
 export const articleCategories = pgTable('article_categories', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -318,8 +318,8 @@ export const articles = pgTable('articles', {
   title: text('title').notNull(),
   slug: text('slug').unique().notNull(),
   excerpt: text('excerpt'),
-  content: text('content'), // JSON string (TipTap/ProseMirror doc) or HTML
-  contentFormat: text('content_format').default('html'), // 'html' | 'tiptap'
+  content: text('content'), // HTML or plain-text converted to HTML
+  contentFormat: text('content_format').default('html'), // 'html'
   categoryId: uuid('category_id').references(() => articleCategories.id, { onDelete: 'set null' }),
   featuredImageUrl: text('featured_image_url'),
   featuredImageAlt: text('featured_image_alt'),
@@ -330,6 +330,13 @@ export const articles = pgTable('articles', {
   status: articleStatusEnum('status').default('draft'),
   featured: boolean('featured').default(false),
   readingTimeMinutes: integer('reading_time_minutes'),
+  viewCount: integer('view_count').default(0),
+  // Public submission fields
+  submittedByName: text('submitted_by_name'),
+  submittedByEmail: text('submitted_by_email'),
+  submittedAt: timestamp('submitted_at'),
+  contentPlaintext: text('content_plaintext'), // original plain text from public submissions
+  reviewNote: text('review_note'),              // admin's note on approval/rejection
   publishedAt: timestamp('published_at'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),

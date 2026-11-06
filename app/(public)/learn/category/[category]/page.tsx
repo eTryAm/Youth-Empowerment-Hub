@@ -7,11 +7,10 @@ import { SectionWrapper } from '@/components/shared/section-wrapper';
 import { ArticleCard } from '@/components/public/article-card';
 import { JsonLd } from '@/components/seo/json-ld';
 import { breadcrumbSchema } from '@/components/seo/schema';
-import {
-  getPublishedArticlesByCategorySlug,
-  getPublicArticleCategories,
-} from '@/lib/public/queries';
+import { getPublishedArticlesByCategorySlug, getPublicArticleCategories } from '@/lib/public/queries';
 import { getSiteUrl } from '@/lib/site-url';
+
+export const dynamic = 'force-dynamic';
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>;
@@ -99,6 +98,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   author={article.author}
                   publishedAt={article.publishedAt}
                   readingTimeMinutes={article.readingTimeMinutes}
+                  viewCount={article.viewCount}
                   categoryName={article.categoryName}
                   categorySlug={article.categorySlug}
                   featured={article.featured ?? false}

@@ -54,7 +54,13 @@ export async function getPublicNavItems() {
       .where(eq(navigationItems.visible, true))
       .orderBy(asc(navigationItems.displayOrder));
     if (rows.length > 0) {
-      return rows.map((item) => ({ label: item.label, url: item.url }));
+      const items = rows.map((item) => ({ label: item.label, url: item.url }));
+      if (!items.some((item) => item.url === '/learn')) {
+        const eventsIdx = items.findIndex((i) => i.url === '/events');
+        const insertIdx = eventsIdx !== -1 ? eventsIdx + 1 : 4;
+        items.splice(insertIdx, 0, { label: 'Knowledge & Updates', url: '/learn' });
+      }
+      return items;
     }
   } catch {
     // fall through to defaults
@@ -307,6 +313,7 @@ export async function getPublishedArticles(opts?: {
         updatedAt: articles.updatedAt,
         featured: articles.featured,
         readingTimeMinutes: articles.readingTimeMinutes,
+        viewCount: articles.viewCount,
         categoryId: articles.categoryId,
         categoryName: articleCategories.name,
         categorySlug: articleCategories.slug,
@@ -342,6 +349,7 @@ export async function getPublishedArticleBySlug(slug: string) {
         publishedAt: articles.publishedAt,
         updatedAt: articles.updatedAt,
         readingTimeMinutes: articles.readingTimeMinutes,
+        viewCount: articles.viewCount,
         categoryId: articles.categoryId,
         categoryName: articleCategories.name,
         categorySlug: articleCategories.slug,
@@ -371,6 +379,7 @@ export async function getRelatedArticles(articleId: string, categoryId: string |
         author: articles.author,
         publishedAt: articles.publishedAt,
         readingTimeMinutes: articles.readingTimeMinutes,
+        viewCount: articles.viewCount,
         categoryName: articleCategories.name,
         categorySlug: articleCategories.slug,
       })
@@ -397,6 +406,7 @@ export async function getPublishedArticlesByCategorySlug(categorySlug: string) {
         author: articles.author,
         publishedAt: articles.publishedAt,
         readingTimeMinutes: articles.readingTimeMinutes,
+        viewCount: articles.viewCount,
         featured: articles.featured,
         categoryName: articleCategories.name,
         categorySlug: articleCategories.slug,

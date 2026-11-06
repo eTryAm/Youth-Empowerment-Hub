@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { createArticle, updateArticle } from '@/lib/actions/articles';
+import { cleanImageUrl } from '@/lib/image-url';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -48,6 +49,14 @@ function slugify(str: string): string {
     .slice(0, 320);
 }
 
+function plaintextToHtml(text: string): string {
+  const paragraphs = text
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  return paragraphs.map((p) => `<p>${p.replace(/\n/g, '<br />')}</p>`).join('\n');
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function ArticleForm({ categories, initialData }: ArticleFormProps) {
@@ -73,6 +82,10 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
   const [readingTimeMinutes, setReadingTimeMinutes] = useState<string>(
     initialData?.readingTimeMinutes?.toString() ?? '',
   );
+  const [contentMode, setContentMode] = useState<'plain' | 'html'>(
+    initialData?.content && initialData.content.includes('<') ? 'html' : 'plain',
+  );
+  const [imageError, setImageError] = useState(false);
 
   function handleTitleChange(value: string) {
     setTitle(value);
@@ -88,20 +101,32 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    let finalContent = content;
+    if (contentMode === 'plain' && content && !content.includes('<p') && !content.includes('<div')) {
+      finalContent = plaintextToHtml(content);
+    }
+
+    let calculatedReadingTime = readingTimeMinutes ? parseInt(readingTimeMinutes, 10) : null;
+    if (!calculatedReadingTime && content) {
+      const words = content.replace(/<[^>]*>/g, '').trim().split(/\s+/).length;
+      calculatedReadingTime = Math.max(1, Math.round(words / 200));
+    }
+
     const payload = {
       title,
       slug,
       excerpt: excerpt || null,
-      content: content || null,
+      content: finalContent || null,
       categoryId: categoryId || null,
-      featuredImageUrl: featuredImageUrl || null,
+      featuredImageUrl: cleanImageUrl(featuredImageUrl) || null,
       featuredImageAlt: featuredImageAlt || null,
       author: author || 'YEH Editorial Team',
       seoTitle: seoTitle || null,
       seoDescription: seoDescription || null,
       status,
       featured,
-      readingTimeMinutes: readingTimeMinutes ? parseInt(readingTimeMinutes, 10) : null,
+      readingTimeMinutes: calculatedReadingTime,
     };
 
     startTransition(async () => {
@@ -231,20 +256,62 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
 
       {/* Content */}
       <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
-        <h2 className="text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
-          Article Content{' '}
-          <span className="text-xs font-normal text-slate-400">(HTML supported)</span>
-        </h2>
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
+          <h2 className="text-base font-semibold text-slate-900">Article Content</h2>
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setContentMode('plain')}
+              className={`px-3 py-1 rounded-md transition-colors ${
+                contentMode === 'plain'
+                  ? 'bg-white text-blue-600 font-bold shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              📝 Easy Plain Text (Recommended)
+            </button>
+            <button
+              type="button"
+              onClick={() => setContentMode('html')}
+              className={`px-3 py-1 rounded-md transition-colors ${
+                contentMode === 'html'
+                  ? 'bg-white text-blue-600 font-bold shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              💻 HTML Mode
+            </button>
+          </div>
+        </div>
+
+        {contentMode === 'plain' ? (
+          <div className="bg-blue-50/70 border border-blue-100 rounded-xl p-3 text-xs text-blue-800 space-y-1">
+            <p className="font-semibold">💡 Plain Text Mode Active</p>
+            <p>
+              Type naturally like an article or email. Leave an empty line between paragraphs.
+              Formatting is applied automatically when saving.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 space-y-1">
+            <p className="font-semibold">⚙️ Advanced HTML Mode Active</p>
+            <p>Use standard HTML tags (&lt;p&gt;, &lt;h2&gt;, &lt;ul&gt;, etc.). Scripts will be safely sanitized.</p>
+          </div>
+        )}
+
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={20}
-          placeholder={`<h2>Introduction</h2>\n<p>Write your article content here. Standard HTML tags are supported.</p>`}
-          className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm font-mono text-slate-900 resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder={
+            contentMode === 'plain'
+              ? `Introduction\n\nYouth today have tremendous opportunities, but guidance is essential.\n\nKey Recommendations\n\n1. Focus on core technical skills.\n2. Participate in hackathons and volunteer projects.\n\nConclusion\n\nStart small and be consistent.`
+              : `<h2>Introduction</h2>\n<p>Write your article content here with HTML tags.</p>`
+          }
+          className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm font-mono text-slate-900 resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent leading-relaxed"
         />
         <p className="text-xs text-slate-400">
-          Content is rendered as HTML on the public article page. Only admins can publish content —
-          ensure it is reviewed before publishing.
+          Content is sanitized before being displayed on public pages to ensure complete security.
         </p>
       </div>
 
@@ -255,14 +322,70 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
         </h2>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Image URL</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-sm font-medium text-slate-700">Image URL</label>
+            <span className="text-xs text-slate-400">Supports direct image links (.jpg, .png, Unsplash, Pexels)</span>
+          </div>
           <input
             type="url"
             value={featuredImageUrl}
-            onChange={(e) => setFeaturedImageUrl(e.target.value)}
-            placeholder="https://example.com/image.jpg"
+            onChange={(e) => {
+              const cleaned = cleanImageUrl(e.target.value);
+              setFeaturedImageUrl(cleaned || '');
+              setImageError(false);
+            }}
+            placeholder="https://images.unsplash.com/photo-..."
             className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
+          <p className="text-xs text-slate-400 mt-1">
+            💡 <strong>Tip:</strong> For Google or Bing image search, right-click the image and choose <em>&quot;Copy Image Address&quot;</em>.
+          </p>
+
+          {/* Live Image Preview */}
+          {featuredImageUrl && (
+            <div className="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className={imageError ? 'text-red-600' : 'text-green-600'}>
+                  {imageError ? '⚠️ Image failed to load — check the link' : '✓ Live Image Preview'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFeaturedImageUrl('');
+                    setImageError(false);
+                  }}
+                  className="text-slate-400 hover:text-red-500 text-xs"
+                >
+                  Remove
+                </button>
+              </div>
+              <div className="relative aspect-video w-full max-w-sm rounded-lg overflow-hidden bg-slate-200 border border-slate-300">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={featuredImageUrl}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                  onError={() => setImageError(true)}
+                  onLoad={() => setImageError(false)}
+                />
+              </div>
+              {imageError && (
+                <p className="text-xs text-red-600 leading-relaxed">
+                  The link provided does not point directly to an image file or the host blocks hotlinking.
+                  Please paste a direct image URL (e.g. from{' '}
+                  <a
+                    href="https://unsplash.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline font-bold"
+                  >
+                    Unsplash
+                  </a>{' '}
+                  or right-click an image and copy its address).
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <div>
@@ -282,7 +405,10 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Reading Time <span className="text-xs text-slate-400 font-normal">(minutes)</span>
+            Reading Time{' '}
+            <span className="text-xs text-slate-400 font-normal">
+              (minutes — leave blank to auto-calculate)
+            </span>
           </label>
           <input
             type="number"
@@ -291,7 +417,7 @@ export function ArticleForm({ categories, initialData }: ArticleFormProps) {
             min={1}
             max={120}
             placeholder="e.g. 5"
-            className="w-32 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-36 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
       </div>

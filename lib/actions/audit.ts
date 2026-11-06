@@ -99,6 +99,9 @@ export const AUDIT_ACTIONS = {
   ARTICLE_CATEGORY_CREATED: 'article_category.created',
   ARTICLE_CATEGORY_UPDATED: 'article_category.updated',
   ARTICLE_CATEGORY_DELETED: 'article_category.deleted',
+  ARTICLE_SUBMISSION_RECEIVED: 'article.submission_received',
+  ARTICLE_APPROVED: 'article.approved',
+  ARTICLE_REJECTED: 'article.rejected',
 } as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];

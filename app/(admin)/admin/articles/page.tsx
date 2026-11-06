@@ -45,13 +45,18 @@ export default async function AdminArticlesPage() {
       </div>
 
       {/* Stats strip */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
           { label: 'Total', count: articles.length, color: 'text-slate-900' },
           {
             label: 'Published',
             count: articles.filter((a) => a.status === 'published').length,
             color: 'text-green-600',
+          },
+          {
+            label: 'Pending Review',
+            count: articles.filter((a) => a.status === 'pending_review').length,
+            color: 'text-orange-600',
           },
           {
             label: 'Drafts',
