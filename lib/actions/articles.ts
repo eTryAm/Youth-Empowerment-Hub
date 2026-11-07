@@ -2,11 +2,14 @@
 
 import { db } from '@/lib/db';
 import { articles, articleCategories } from '@/lib/db/schema';
-import { eq, desc, asc, and, sql } from 'drizzle-orm';
+import { eq, desc, asc, and, or, isNull, lt, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { requirePermission } from '@/lib/auth';
 import { createAuditLog, AUDIT_ACTIONS } from './audit';
 import { cleanImageUrl } from '@/lib/image-url';
+import { getSiteUrl } from '@/lib/site-url';
+import { getPublicationEmailAvailability, sendPublicationEmail } from '@/lib/email/publication-email';
+import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
 // ── Validation Schemas ──────────────────────────────────────────────────────
@@ -200,6 +203,7 @@ export async function getAdminArticles() {
         submittedByName: articles.submittedByName,
         submittedByEmail: articles.submittedByEmail,
         submittedAt: articles.submittedAt,
+        publicationEmailStatus: articles.publicationEmailStatus,
         reviewNote: articles.reviewNote,
         viewCount: articles.viewCount,
         publishedAt: articles.publishedAt,
@@ -364,6 +368,159 @@ export async function publishArticle(id: string) {
 export async function unpublishArticle(id: string) {
   await requirePermission('articles.publish');
   return updateArticle(id, { status: 'draft' });
+}
+
+// ── Publication notifications ───────────────────────────────────────────────
+
+const articleIdSchema = z.string().uuid();
+const EMAIL_SEND_LOCK_MS = 5 * 60 * 1000;
+
+/**
+ * Sends the publication email to the trusted submitter stored on an article.
+ * The client provides only the article ID and an explicit resend acknowledgement;
+ * all content, recipient information, and sender configuration stay server-side.
+ */
+export async function sendPublicationEmailForArticle(id: string, allowResend = false) {
+  const user = await requirePermission('articles.send_publication_email');
+  const parsedId = articleIdSchema.safeParse(id);
+  if (!parsedId.success) return { success: false, error: 'Invalid article.' };
+  const resendRequested = allowResend === true;
+
+  const [article] = await db
+    .select({
+      id: articles.id,
+      title: articles.title,
+      slug: articles.slug,
+      status: articles.status,
+      submittedByName: articles.submittedByName,
+      submittedByEmail: articles.submittedByEmail,
+      publicationEmailStatus: articles.publicationEmailStatus,
+      publicationEmailSendingAt: articles.publicationEmailSendingAt,
+    })
+    .from(articles)
+    .where(eq(articles.id, parsedId.data))
+    .limit(1);
+
+  if (!article) return { success: false, error: 'Article not found.' };
+  if (article.status !== 'published') {
+    return { success: false, error: 'Only published articles can send publication emails.' };
+  }
+
+  const recipientEmail = article.submittedByEmail?.trim();
+  if (!recipientEmail || !z.string().email().safeParse(recipientEmail).success) {
+    return { success: false, error: 'The original submission does not have a valid email address.' };
+  }
+
+  if (article.publicationEmailStatus === 'sent' && !resendRequested) {
+    return { success: false, error: 'This publication email has already been sent. Use Resend Email to send it again.' };
+  }
+
+  const emailAvailability = getPublicationEmailAvailability();
+  if (!emailAvailability.configured) {
+    return { success: false, error: emailAvailability.reason ?? 'Resend has not been configured.' };
+  }
+
+  const now = new Date();
+  const lockExpiresAt = new Date(now.getTime() - EMAIL_SEND_LOCK_MS);
+  const nextAttemptKey = randomUUID();
+
+  // This conditional update is the concurrency guard. A second request cannot
+  // claim the same article while the first request is in progress. If a server
+  // stops mid-request, the claim expires and its idempotency key is reused.
+  const [claim] = await db
+    .update(articles)
+    .set({
+      publicationEmailSendingAt: now,
+      publicationEmailLastAttemptedAt: now,
+      publicationEmailFailureReason: null,
+      publicationEmailAttemptKey: sql`COALESCE(${articles.publicationEmailAttemptKey}, ${nextAttemptKey})`,
+      updatedAt: now,
+    })
+    .where(
+      and(
+        eq(articles.id, parsedId.data),
+        eq(articles.status, 'published'),
+        or(
+          isNull(articles.publicationEmailSendingAt),
+          lt(articles.publicationEmailSendingAt, lockExpiresAt),
+        ),
+      ),
+    )
+    .returning({ attemptKey: articles.publicationEmailAttemptKey });
+
+  if (!claim?.attemptKey) {
+    return { success: false, error: 'A publication email request is already being processed.' };
+  }
+
+  const articleUrl = new URL(`/learn/${encodeURIComponent(article.slug)}`, getSiteUrl()).toString();
+  const delivery = await sendPublicationEmail({
+    recipientName: article.submittedByName ?? 'there',
+    recipientEmail,
+    articleTitle: article.title,
+    articleUrl,
+    idempotencyKey: `article-publication:${article.id}:${claim.attemptKey}`,
+  });
+
+  const completedAt = new Date();
+  if (!delivery.success) {
+    try {
+      await db
+        .update(articles)
+        .set({
+          publicationEmailStatus: 'failed',
+          publicationEmailFailureReason: delivery.error,
+          publicationEmailSendingAt: null,
+          publicationEmailAttemptKey: null,
+          updatedAt: completedAt,
+        })
+        .where(eq(articles.id, article.id));
+      await createAuditLog({
+        userId: user.id,
+        action: AUDIT_ACTIONS.ARTICLE_PUBLICATION_EMAIL_FAILED,
+        entityType: 'article',
+        entityId: article.id,
+        metadata: { recipientEmail, articleUrl },
+      });
+    } catch (error) {
+      console.error('[sendPublicationEmailForArticle] Failed to record delivery failure', error);
+    }
+    return { success: false, error: delivery.error, status: 'failed' as const };
+  }
+
+  try {
+    await db
+      .update(articles)
+      .set({
+        publicationEmailStatus: 'sent',
+        publicationEmailSentAt: completedAt,
+        publicationEmailResendId: delivery.resendId,
+        publicationEmailFailureReason: null,
+        publicationEmailSendingAt: null,
+        publicationEmailAttemptKey: null,
+        updatedAt: completedAt,
+      })
+      .where(eq(articles.id, article.id));
+
+    await createAuditLog({
+      userId: user.id,
+      action: AUDIT_ACTIONS.ARTICLE_PUBLICATION_EMAIL_SENT,
+      entityType: 'article',
+      entityId: article.id,
+      metadata: { recipientEmail, articleUrl, resendId: delivery.resendId, resend: resendRequested },
+    });
+
+    revalidatePath(`/admin/articles/${article.id}`);
+    revalidatePath('/admin/articles');
+    return { success: true, status: 'sent' as const, sentAt: completedAt };
+  } catch (error) {
+    // Keep the claim in place. A later retry reuses its Resend idempotency key,
+    // which avoids a duplicate if Resend accepted the first request.
+    console.error('[sendPublicationEmailForArticle] Failed to record delivery acceptance', error);
+    return {
+      success: false,
+      error: 'The email provider accepted the request, but its status could not be recorded. Please wait before retrying.',
+    };
+  }
 }
 
 // ── Review workflow ───────────────────────────────────────────────────────────

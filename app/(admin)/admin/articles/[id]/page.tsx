@@ -1,7 +1,10 @@
 import { notFound } from 'next/navigation';
 import { getAdminArticleById, getAdminArticleCategories } from '@/lib/actions/articles';
 import { ArticleForm } from '@/components/admin/articles/article-form';
+import { PublicationEmailCard } from '@/components/admin/articles/publication-email-card';
 import { requirePermission } from '@/lib/auth';
+import { getSiteUrl } from '@/lib/site-url';
+import { getPublicationEmailAvailability } from '@/lib/email/publication-email';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,6 +22,9 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
   ]);
 
   if (!article) notFound();
+
+  const emailAvailability = getPublicationEmailAvailability();
+  const articleUrl = new URL(`/learn/${encodeURIComponent(article.slug)}`, getSiteUrl()).toString();
 
   return (
     <div className="flex-1 p-4 md:p-8 pt-6 max-w-4xl">
@@ -45,6 +51,22 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
           readingTimeMinutes: article.readingTimeMinutes,
         }}
       />
+      <div className="mt-6">
+        <PublicationEmailCard
+          articleId={article.id}
+          articleTitle={article.title}
+          articleUrl={articleUrl}
+          articleStatus={article.status}
+          submitterName={article.submittedByName}
+          submitterEmail={article.submittedByEmail}
+          emailStatus={article.publicationEmailStatus}
+          emailSentAt={article.publicationEmailSentAt}
+          emailLastAttemptedAt={article.publicationEmailLastAttemptedAt}
+          emailFailureReason={article.publicationEmailFailureReason}
+          resendConfigured={emailAvailability.configured}
+          configurationReason={emailAvailability.reason}
+        />
+      </div>
     </div>
   );
 }

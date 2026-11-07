@@ -8,6 +8,13 @@
       "when": 1793884200143,
       "tag": "0000_eager_crystal",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794049282893,
+      "tag": "0001_blushing_christian_walker",
+      "breakpoints": true
     }
   ]
 }

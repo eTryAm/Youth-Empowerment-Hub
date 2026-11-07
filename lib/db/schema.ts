@@ -338,6 +338,16 @@ export const articles = pgTable('articles', {
   contentPlaintext: text('content_plaintext'), // original plain text from public submissions
   reviewNote: text('review_note'),              // admin's note on approval/rejection
   publishedAt: timestamp('published_at'),
+  // Public submissions and published articles share this record, so the
+  // notification history stays attached to the original submitter.
+  publicationEmailStatus: text('publication_email_status').notNull().default('not_sent'),
+  publicationEmailLastAttemptedAt: timestamp('publication_email_last_attempted_at'),
+  publicationEmailSentAt: timestamp('publication_email_sent_at'),
+  publicationEmailResendId: text('publication_email_resend_id'),
+  publicationEmailFailureReason: text('publication_email_failure_reason'),
+  // A short-lived server-side claim prevents concurrent requests from sending twice.
+  publicationEmailSendingAt: timestamp('publication_email_sending_at'),
+  publicationEmailAttemptKey: text('publication_email_attempt_key'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });

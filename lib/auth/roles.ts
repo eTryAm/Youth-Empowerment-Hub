@@ -87,6 +87,7 @@ export const PERMISSIONS = {
   'articles.delete': [ROLES.SUPER_ADMIN],
   'articles.view': [ROLES.SUPER_ADMIN, ROLES.CONTENT_ADMIN, ROLES.VIEWER],
   'articles.publish': [ROLES.SUPER_ADMIN, ROLES.CONTENT_ADMIN],
+  'articles.send_publication_email': [ROLES.SUPER_ADMIN, ROLES.CONTENT_ADMIN],
 } as const;
 
 export type Permission = keyof typeof PERMISSIONS;

@@ -102,6 +102,8 @@ export const AUDIT_ACTIONS = {
   ARTICLE_SUBMISSION_RECEIVED: 'article.submission_received',
   ARTICLE_APPROVED: 'article.approved',
   ARTICLE_REJECTED: 'article.rejected',
+  ARTICLE_PUBLICATION_EMAIL_SENT: 'article.publication_email_sent',
+  ARTICLE_PUBLICATION_EMAIL_FAILED: 'article.publication_email_failed',
 } as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];

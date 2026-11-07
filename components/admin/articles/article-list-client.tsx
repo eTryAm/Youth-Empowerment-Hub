@@ -22,6 +22,7 @@ interface Article {
   author: string | null;
   submittedByName: string | null;
   submittedByEmail: string | null;
+  publicationEmailStatus?: string | null;
   viewCount: number | null;
   publishedAt: Date | null;
   createdAt: Date | null;
@@ -299,6 +300,17 @@ export function ArticleListClient({ articles: initialArticles }: ArticleListClie
                       {isPending && article.submittedByEmail && (
                         <div className="text-[11px] text-orange-600 mt-0.5">
                           📬 {article.submittedByEmail}
+                        </div>
+                      )}
+                      {!isPending && article.submittedByEmail && statusKey === 'published' && (
+                        <div className="text-[11px] mt-0.5">
+                          {article.publicationEmailStatus === 'sent' ? (
+                            <span className="text-green-600 font-medium">✓ Author notified</span>
+                          ) : article.publicationEmailStatus === 'failed' ? (
+                            <span className="text-red-500 font-medium">⚠ Email failed</span>
+                          ) : (
+                            <span className="text-blue-600 font-medium">✉ Author not notified</span>
+                          )}
                         </div>
                       )}
                       <div className="text-xs text-slate-400 mt-0.5 font-mono">/learn/{article.slug}</div>
